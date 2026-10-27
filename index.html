@@ -1,0 +1,1577 @@
+<title>Clearly Tripping, Re-routed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a scrolling deck of full-width chapters on warm paper, Cleartrip orange as the one loud colour; chapter dots on the right double as slide navigation. Single committed light look. */
+:root{
+  color-scheme:light;
+  --paper:#FFF8EF; --paper2:#FFEFD9; --ink:#1E140C; --ink2:#5B4A3C; --dim:#9A8573; --line:#EEDCC4;
+  --orange:#F26B0F; --orange2:#D9580A; --sun:#F9B51E; --blue:#2E57C8; --plum:#7A2E66; --mint:#1F9D6B;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--body);margin:0;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+section.ch{padding-block:96px 72px;border-bottom:1px solid var(--line);position:relative}
+.kick{font:700 .72rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin:0 0 18px}
+.kick b{background:var(--ink);color:var(--paper);padding:3px 8px;border-radius:6px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.9rem,4.4vw,3.4rem);line-height:1.02;font-weight:900}
+h2 em{font-style:normal;color:var(--orange)}
+h3{font-size:1.25rem;font-weight:700;line-height:1.2}
+.lede{font-size:clamp(1.05rem,1.6vw,1.25rem);color:var(--ink2);max-width:62ch;margin:18px 0 0}
+p{max-width:68ch}
+
+/* nav */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(255,248,239,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;height:58px}
+.brand{font:900 .95rem var(--display);letter-spacing:-.01em;white-space:nowrap}
+.brand span{color:var(--orange)}
+.top nav{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.top nav a{font:600 .82rem var(--body);color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.top nav a.on{background:var(--ink);color:var(--paper)}
+.dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:10px}
+.dots a{width:10px;height:10px;border-radius:50%;background:var(--line);display:block;transition:all .25s}
+.dots a.on{background:var(--orange);height:26px;border-radius:6px}
+@media (max-width:820px){.dots{display:none}.top nav{display:none}}
+
+/* cover */
+.cover{min-height:min(92vh,880px);display:flex;align-items:center;overflow:hidden;background:radial-gradient(1200px 600px at 85% 20%,#FFD9A8 0,transparent 60%),var(--paper)}
+.cover .wrap{position:relative;z-index:2}
+.cover h1{font-size:clamp(2.6rem,8.4vw,7rem);line-height:.92;font-weight:900}
+.cover h1 .o{color:var(--orange)}
+.cover .from{font:700 .78rem var(--mono);letter-spacing:.16em;text-transform:uppercase;margin-bottom:26px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.cover .from i{width:28px;height:2px;background:var(--ink)}
+.cover .line{font-family:var(--display);font-weight:500;font-size:clamp(1.05rem,2vw,1.5rem);margin-top:30px;max-width:30ch;line-height:1.35}
+.cover .line b{color:var(--orange);font-weight:700}
+.route{position:absolute;right:-40px;bottom:-30px;width:min(640px,70vw);opacity:.95;z-index:1;pointer-events:none}
+.route path.dash{stroke-dasharray:6 9;animation:dash 30s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-600}}
+.plane{offset-path:path("M20 420 C 180 300, 260 380, 380 230 S 560 80, 620 40");animation:fly 9s ease-in-out infinite;offset-rotate:auto}
+@keyframes fly{0%{offset-distance:0%;opacity:0}8%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:12px;border:2px solid var(--ink);background:var(--ink);color:var(--paper);font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--orange)}
+.btn.ghost{background:transparent;color:var(--ink)}
+
+/* honest chapter */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:40px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0}
+.stat .v{font:900 clamp(1.8rem,3.4vw,2.6rem)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat .k{font:700 .66rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:10px}
+.stat p{font-size:.92rem;color:var(--ink2);margin:8px 0 0}
+.stat.warn .v{color:var(--orange)}
+.bars{margin-top:30px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
+.bars h4{margin:0 0 4px;font:700 .95rem var(--body)}
+.bars small{color:var(--dim)}
+.brow{display:grid;grid-template-columns:40px 150px minmax(0,1fr) 70px;gap:12px;align-items:center;margin-top:12px;font-size:.88rem}
+.brow .tr{height:14px;border-radius:0 4px 4px 0;background:var(--paper2);overflow:hidden}
+.brow .tr i{display:block;height:100%;border-radius:0 4px 4px 0;background:var(--orange);width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.brow.old .tr i{background:var(--ink)}
+.blg{position:relative;display:block;width:40px;height:40px}
+.blg .lgimg{width:40px;height:40px;border-radius:11px;background:var(--bc);box-shadow:0 6px 14px -8px rgba(0,0,0,.45)}
+.blg .lgimg.has{background:#fff;border:1px solid var(--line)}
+.blg .lgimg img{object-fit:contain;padding:4px}
+.blg .lgph{font:800 .78rem/1 var(--body);color:#fff;letter-spacing:-.02em}
+.blg .rx{top:-6px;right:-6px}
+.canedit .blg{cursor:pointer}
+.canedit .blg .lgimg:not(.has)::after{content:"＋";position:absolute;right:-4px;bottom:-4px;width:16px;height:16px;border-radius:50%;background:var(--ink);color:#fff;font:700 10px/16px var(--body);text-align:center}
+@media (max-width:820px){.blg,.blg .lgimg{width:34px;height:34px}}
+.brow .n{font:700 .82rem var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.diag{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:30px}
+.dg{padding:18px 20px;border-radius:16px;border:1px solid var(--line);background:var(--paper2)}
+.dg b{display:block;font-family:var(--display);font-size:1rem;margin-bottom:4px}
+.dg span{color:var(--ink2);font-size:.95rem}
+.note{font-size:.8rem;color:var(--dim);margin-top:16px}
+@media (max-width:820px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.diag{grid-template-columns:1fr}.brow{grid-template-columns:34px 92px minmax(0,1fr) 50px}}
+
+/* market */
+.market{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:36px}
+.mk{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0;transition:transform .25s,box-shadow .25s}
+.mk:hover{transform:translateY(-4px);box-shadow:0 18px 30px -20px rgba(30,20,12,.35)}
+.mk .ic{font-size:1.6rem}
+.mk h3{font-size:1rem;margin:10px 0 6px}
+.mk p{font-size:.9rem;color:var(--ink2);margin:0}
+.gap{margin-top:22px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:22px 24px;border-radius:18px;background:var(--ink);color:var(--paper)}
+.gap .big{font:900 clamp(1.2rem,2.4vw,1.7rem)/1.15 var(--display);flex:1;min-width:240px}
+.gap .big em{font-style:normal;color:var(--sun)}
+@media (max-width:820px){.market{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* plan */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:40px;border:2px solid var(--ink);border-radius:22px;overflow:hidden}
+.side{padding:30px;min-width:0}
+.side.film{background:var(--ink);color:var(--paper)}
+.side.game{background:var(--orange);color:#fff}
+.side .lab{font:700 .7rem var(--mono);letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.side h3{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;margin:8px 0 14px}
+.side dl{margin:0;display:grid;gap:12px}
+.side dt{font:700 .66rem var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.side dd{margin:2px 0 0;font-size:1rem}
+.together{text-align:center;margin-top:34px}
+.together q{font:900 clamp(1.4rem,3.2vw,2.4rem)/1.15 var(--display);quotes:none;letter-spacing:-.02em}
+.together q span{color:var(--orange)}
+@media (max-width:820px){.split{grid-template-columns:1fr}}
+
+/* formats */
+.fhead{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:40px;align-items:end}
+.why{display:grid;gap:12px;margin-top:30px;counter-reset:w}
+.why div{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:start;padding:16px 18px;background:#fff;border:1px solid var(--line);border-radius:16px}
+.why div::before{counter-increment:w;content:counter(w);font:900 1.1rem var(--display);color:var(--orange)}
+.why b{display:block}
+.why span{color:var(--ink2);font-size:.95rem}
+.dark{background:var(--ink);color:var(--paper)}
+.dark .why div{background:#2A1E15;border-color:#3C2C20}
+.dark .why span,.dark .lede{color:#D8C8B6}
+.dark .kick b{background:var(--orange);color:#fff}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 16px}
+.dur{display:inline-block;margin-top:16px;font:700 .82rem var(--mono);letter-spacing:.06em;padding:7px 12px;border-radius:10px;background:var(--orange);color:#fff}
+.proof{margin-top:34px;padding:30px;border-radius:24px;background:linear-gradient(140deg,#2E2118 0,#1A120C 70%);border:1px solid #4A3828;position:relative;overflow:hidden}
+.proof::after{content:"";position:absolute;right:-80px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(249,181,30,.22),transparent 70%)}
+.proof .pk{font:700 .7rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--sun)}
+.pf-grid{display:grid;grid-template-columns:150px minmax(0,1fr);gap:26px;align-items:center;margin-top:18px;position:relative;z-index:1}
+.lg{position:relative}
+.lgimg{width:150px;height:150px;border-radius:24px;overflow:hidden;background:var(--sun);display:grid;place-items:center;box-shadow:0 20px 40px -20px rgba(0,0,0,.8);position:relative}
+.lgimg img{width:100%;height:100%;object-fit:cover}
+.lgimg .rx{position:absolute}
+.canedit .lgimg:hover .rx{display:grid}
+.lgph{font:900 1.2rem/1.05 var(--display);color:var(--ink);text-align:center}
+.lgup{display:none;margin-top:8px;font:700 .7rem var(--mono);color:var(--sun);cursor:pointer;text-align:center}
+.canedit .lgup{display:block}
+.pf-main h3{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;color:#fff;line-height:1.1}
+.pf-main h3 em{font-style:normal;color:var(--sun)}
+.pf-main p{color:#F3E6D4;font-size:1.05rem;margin:12px 0 0;max-width:56ch}
+.pf-vs{display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr);gap:12px;align-items:stretch;margin-top:24px;position:relative;z-index:1}
+.pf-vs>div{border-radius:16px;padding:16px 18px}
+.vs-a{background:rgba(255,255,255,.05);border:1px dashed #5A4636}
+.vs-b{background:var(--sun);color:var(--ink)}
+.pf-vs small{display:block;font:700 .62rem var(--mono);letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+.pf-vs b{display:block;font-family:var(--display);font-size:1.05rem;margin:6px 0 4px}
+.vs-a b,.vs-a span{color:#F3E6D4}
+.pf-vs span{font-size:.92rem}
+.vs-arrow{display:grid;place-items:center;font:900 1.6rem var(--display);color:var(--sun)}
+.pf-close{position:relative;z-index:1;margin:22px 0 0;font-size:1.1rem;color:#F3E6D4}
+.pf-close b{color:var(--sun)}
+@media (max-width:760px){.pf-grid,.pf-vs{grid-template-columns:1fr}.vs-arrow{transform:rotate(90deg)}}
+.vref{margin-top:20px;border-radius:18px;overflow:hidden;background:#000;border:1px solid #3C2C20}
+.vref video{display:block;width:100%;max-height:560px;background:#000}
+.vref .vh{padding:10px 14px;background:#2A1E15;color:#F3E6D4;font:700 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase}
+@media (max-width:860px){.proof{grid-template-columns:1fr}}
+.scripts-h{color:#fff;margin-top:44px;font-size:clamp(1.4rem,2.6vw,2rem);font-weight:900}
+.scripts-h span{display:block;font:500 .9rem var(--body);color:#B7A28C;margin-top:4px}
+.hing{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:24px;margin-top:30px;padding:26px;border-radius:20px;background:#FFF8EF;color:var(--ink);border-top:6px solid var(--orange)}
+.hing h3{font-size:1.6rem;font-weight:900;margin:12px 0 6px}
+.hing .kick b{background:var(--orange)}
+.hing p{color:var(--ink2)}
+.hg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hg div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.hg b{display:block;margin-bottom:4px;color:var(--orange2);font-family:var(--display);font-size:.95rem}
+.hg span{font-size:.94rem;color:var(--ink);line-height:1.5}
+@media (max-width:860px){.hing,.hg{grid-template-columns:1fr}}
+.tabs button{border:1.5px solid #4A3828;background:transparent;color:#E8D9C6;padding:9px 14px;border-radius:999px;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--orange);border-color:var(--orange);color:#fff}
+.script{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:20px}
+.sc-meta,.sc-body{background:#FFF8EF;color:var(--ink);border:1px solid #3C2C20;border-radius:18px;padding:22px;min-width:0}
+.sclab{font:700 .66rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#fff;background:var(--orange);display:inline-block;padding:3px 9px;border-radius:6px;margin-bottom:14px}
+.sc-body .sclab{background:var(--ink);position:sticky;top:0}
+.sc-meta h3{font-size:1.6rem;font-weight:900}
+.sc-meta .tg{font:700 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--orange2);margin:8px 0 14px}
+.sc-meta h4{font:700 .68rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:16px 0 4px}
+.sc-meta p{color:var(--ink2);font-size:.94rem;margin:0}
+.sc-body{max-height:560px;overflow:auto}
+.ln{margin:0 0 12px;font-size:1.02rem;line-height:1.6;color:var(--ink)}
+.ln b{color:var(--orange2);font:700 .74rem var(--mono);letter-spacing:.08em;margin-right:8px}
+.ln.dir{font-style:italic;color:var(--ink2);border-left:2px solid var(--orange);padding-left:10px}
+.pipeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
+.pp{border:1.5px dashed #4A3828;border-radius:14px;padding:14px;color:#E8D9C6}
+.pp b{display:block;font-family:var(--display);font-size:.92rem;color:#fff;margin-bottom:4px}
+.pp i{display:block;margin-top:8px;font-style:normal;font-size:.86rem;color:var(--sun)}
+.pp small{font:700 .62rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--sun)}
+@media (max-width:860px){.fhead,.script{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* game */
+.game{background:linear-gradient(180deg,var(--paper) 0,#FFE6C6 100%)}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;margin-top:36px;align-items:start}
+.phone{position:relative;max-width:360px;margin:0 auto;aspect-ratio:9/16;width:100%;border-radius:34px;background:#24170E;border:10px solid #120B06;overflow:hidden;box-shadow:0 40px 60px -30px rgba(30,20,12,.6);color:#fff}
+.phone .sky{position:absolute;inset:0;background:linear-gradient(180deg,#4F8B4A 0,#7DB26B 55%,#C9A46A 100%)}
+.phone .tm{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:#fff;color:var(--ink);font:900 1.3rem var(--display);padding:4px 14px;border-radius:12px;font-variant-numeric:tabular-nums;box-shadow:0 4px 0 var(--orange)}
+.phone .tm.low{color:#fff;background:#D62F2F;box-shadow:0 4px 0 #8a1717;animation:pulse .6s infinite alternate}
+@keyframes pulse{to{transform:translateX(-50%) scale(1.08)}}
+.stk{position:absolute;top:60px;left:12px;right:12px;text-align:center;font:700 .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(0,0,0,.45);padding:6px 8px;border-radius:8px}
+.pl{position:absolute;bottom:150px;width:42%;text-align:center}
+.pl.a{left:4%}.pl.b{right:4%}
+.pl .sc{display:inline-block;font:900 1.4rem var(--display);background:#fff;color:var(--ink);border-radius:10px;padding:2px 12px;min-width:44px;transition:transform .3s}
+.pl .sc.up{animation:up .5s}.pl .sc.dn{animation:dn .5s}
+@keyframes up{40%{transform:scale(1.35);background:#3FD08E}}
+@keyframes dn{20%,60%{transform:translateX(-6px);background:#FF6B6B}40%,80%{transform:translateX(6px)}}
+.pl .av{width:62px;height:62px;border-radius:50%;margin:10px auto 6px;display:grid;place-items:center;font:900 1.3rem var(--display);border:3px solid #fff}
+.pl.a .av{background:var(--blue)}.pl.b .av{background:var(--plum)}
+.pl .nm{font:700 .78rem var(--body)}
+.bag{display:flex;gap:2px;justify-content:center;min-height:22px;margin-top:6px;flex-wrap:wrap}
+.bag i{width:9px;height:20px;border-radius:3px 3px 2px 2px;background:#9BD1FF;border:1px solid #fff;animation:drop .4s}
+@keyframes drop{from{transform:translateY(-30px);opacity:0}}
+.qcard{position:absolute;left:10px;right:10px;bottom:12px;background:#fff;color:var(--ink);border-radius:16px;padding:12px}
+.qcard .qq{font:700 .9rem/1.3 var(--body);margin-bottom:8px}
+.qcard .op{display:grid;gap:6px}
+.qcard .op button{border:2px solid var(--ink);background:#fff;border-radius:10px;padding:7px 10px;text-align:left;font:600 .82rem var(--body);color:var(--ink)}
+.qcard .op button:hover{background:var(--paper2)}
+.qcard .op button.ok{background:#3FD08E;border-color:#1F9D6B;color:#fff}
+.qcard .op button.no{background:#FF6B6B;border-color:#C93C3C;color:#fff}
+.aud{position:absolute;inset:0;background:rgba(242,107,15,.94);display:grid;place-items:center;text-align:center;font:900 1.6rem/1.15 var(--display);padding:20px}
+.aud small{display:block;font:700 .8rem var(--mono);margin-top:10px;letter-spacing:.12em}
+.over{position:absolute;inset:0;background:rgba(18,11,6,.88);display:grid;place-items:center;text-align:center;padding:24px}
+.over h4{font:900 1.5rem/1.15 var(--display);margin:0 0 8px}
+.over p{font-size:.9rem;color:#E8D9C6;margin:0 0 14px}
+.splash{position:absolute;inset:0;pointer-events:none}
+.splash i{position:absolute;width:8px;height:14px;border-radius:50%;background:#9BD1FF}
+.how h3{font-size:1.3rem;margin-bottom:10px}
+.flow{display:grid;gap:8px;margin-top:14px}
+.flow div{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:center;padding:11px 14px;background:#fff;border:1px solid var(--line);border-radius:14px;font-size:.94rem}
+.flow div b{font:900 .8rem var(--mono);color:#fff;background:var(--orange);border-radius:8px;text-align:center;padding:4px 0}
+.evolve{margin-top:26px;padding:20px 22px;border-radius:18px;background:var(--ink);color:var(--paper)}
+.evolve b{display:block;font-family:var(--display);font-size:1.1rem;margin-bottom:6px;color:var(--sun)}
+.evolve span{color:#F3E6D4}
+.stakes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
+.stake{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:14px;transition:transform .2s,border-color .2s,box-shadow .2s;color:var(--ink)}
+.stake:hover{transform:translateY(-3px);border-color:var(--orange)}
+.stake[aria-pressed="true"]{border-color:var(--ink);box-shadow:4px 4px 0 var(--orange)}
+.stake .no{font:700 .66rem var(--mono);color:var(--orange)}
+.stake b{display:block;font-family:var(--display);font-size:.95rem;margin:4px 0}
+.stake span{font-size:.82rem;color:var(--ink2)}
+.qset{margin-top:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
+.qset h3 span{color:var(--orange)}
+.qset .mech{color:var(--ink2);margin:6px 0 14px}
+.qlist{display:grid;gap:6px;counter-reset:q}
+.qrow{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.93rem}
+.qrow::before{counter-increment:q;content:counter(q);font:700 .78rem var(--mono);color:var(--dim)}
+.qrow.sp::before{content:"★";color:var(--orange)}
+.qrow .ops{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.qrow .ops span{font-size:.8rem;padding:1px 8px;border-radius:6px;background:var(--paper2);color:var(--ink2)}
+.qrow .ops span.ok{background:#D9F5E7;color:#11613F;font-weight:700}
+.tagq{font:700 .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--orange);padding:1px 6px;border-radius:5px;margin-right:6px}
+.tagq.sd{background:var(--ink)}
+.bonus{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--paper2);font-size:.93rem}
+@media (max-width:900px){.stage{grid-template-columns:1fr}.stakes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* roadmap */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-top:30px}
+.day{border-radius:14px;padding:12px 10px;min-height:96px;background:#fff;border:1px solid var(--line);font-size:.82rem}
+.day b{font:700 .66rem var(--mono);letter-spacing:.12em;color:var(--dim);display:block;margin-bottom:8px}
+.chip{display:inline-block;font:700 .72rem var(--body);padding:4px 8px;border-radius:8px;margin:2px 0}
+.chip.g{background:var(--orange);color:#fff}.chip.f{background:var(--ink);color:#fff}.chip.t{background:var(--paper2);color:var(--ink2)}
+.phases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:30px}
+.phase{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;position:relative;overflow:hidden}
+.phase .d{font:900 2.2rem/1 var(--display);color:var(--orange)}
+.phase h3{margin:6px 0 10px}
+.phase ul{margin:0;padding-left:18px;color:var(--ink2);font-size:.93rem}
+.phase li{margin:4px 0}
+.kpi{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:.86rem}
+.kpi b{font:700 .64rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);display:block}
+@media (max-width:820px){.week{grid-template-columns:repeat(2,minmax(0,1fr))}.phases{grid-template-columns:1fr}}
+.mix{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:30px}
+.mx{border-radius:20px;padding:24px;color:#fff;transition:transform .25s}
+.mx:hover{transform:translateY(-4px) rotate(-.5deg)}
+.mx.g{background:var(--orange)}.mx.f{background:var(--ink)}.mx.t{background:var(--blue)}
+.mx .n{font:900 3.4rem/1 var(--display)}
+.mx b{display:block;font-family:var(--display);margin:8px 0 4px}
+.mx span{font-size:.92rem;opacity:.85}
+.oven{margin-top:30px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:22px 24px;border-radius:18px;border:2px dashed var(--orange);background:#fff}
+.oven .ic{font-size:2rem}
+.oven b{font-family:var(--display);display:block;margin-bottom:4px}
+.oven span{color:var(--ink2)}
+@media (max-width:820px){.mix{grid-template-columns:1fr}}
+.close{background:var(--orange);color:#fff;text-align:center}
+.close h2{font-size:clamp(2rem,5.4vw,4.4rem)}
+.close h2 em{color:var(--ink)}
+.close p{margin:20px auto 0;color:#FFE9D6}
+
+/* reference slots */
+.refs{margin-top:26px;border:2px dashed var(--line);border-radius:18px;padding:16px;background:rgba(255,255,255,.55)}
+.dark .refs{border-color:#4A3828;background:rgba(255,255,255,.03)}
+.refs .rh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.refs .rh b{font:700 .7rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}
+.refs .rh span{font-size:.85rem;color:var(--dim)}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:12px}
+.rimg{position:relative;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:4/5}
+.rimg img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
+.rimg .cap{position:absolute;left:0;right:0;bottom:0;padding:6px 8px;font-size:.74rem;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.rlist{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.rlist li{position:relative;display:grid;grid-template-columns:28px 96px minmax(0,1fr) 20px 26px;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);transition:border-color .2s,transform .2s}
+.rlist li:hover{border-color:var(--orange);transform:translateX(3px)}
+.dark .rlist li{background:#2A1E15;border-color:#3C2C20}
+.rlist .rn{font:700 .72rem var(--mono);color:var(--dim)}
+.rlist .src{font:700 .64rem var(--mono);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:6px;color:var(--ink2)}
+.dark .rlist .src{color:#D8C8B6}
+.rlist .src i{width:8px;height:8px;border-radius:50%;background:var(--sc)}
+.rlist a{font-weight:600;text-decoration:none;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dark .rlist a{color:#FFF3E3}
+.rlist a:hover{color:var(--orange)}
+.rlist .go{color:var(--dim)}
+.rlist .rx{position:static}
+.canedit .rlist li:hover .rx{display:grid}
+@media (max-width:640px){.rlist li{grid-template-columns:24px minmax(0,1fr) 26px}.rlist .src,.rlist .go{display:none}}
+.rlink{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:12px;background:#fff;border:1px solid var(--line);text-decoration:none;color:var(--ink);min-height:110px;justify-content:space-between;transition:transform .2s,border-color .2s;position:relative}
+.dark .rlink{background:#2A1E15;border-color:#3C2C20;color:var(--paper)}
+.rlink:hover{transform:translateY(-2px);border-color:var(--orange)}
+.rlink .src{font:700 .64rem var(--mono);letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.rlink .src i{width:8px;height:8px;border-radius:50%;background:var(--sc,#999)}
+.rlink .lt{font-weight:600;font-size:.9rem;word-break:break-word}
+.rlink .go{font-size:.78rem;color:var(--dim)}
+.rx{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:8px;border:0;background:rgba(0,0,0,.6);color:#fff;display:none;place-items:center;z-index:2}
+.canedit .rimg:hover .rx,.canedit .rlink:hover .rx{display:grid}
+.radd{display:none;gap:8px;flex-wrap:wrap;margin-top:12px}
+.canedit .radd{display:flex}
+.radd input[type=url],.radd input[type=text]{flex:1;min-width:180px;padding:9px 11px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font:inherit;color:var(--ink)}
+.radd .up{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:10px;border:1.5px dashed var(--orange);color:var(--orange);font-weight:700;background:transparent;cursor:pointer}
+.radd button[type=submit]{padding:9px 14px;border-radius:10px;border:0;background:var(--ink);color:var(--paper);font-weight:700}
+.dark .radd input{background:#2A1E15;border-color:#4A3828;color:var(--paper)}
+.dark .radd button[type=submit]{background:var(--orange)}
+.rempty{font-size:.85rem;color:var(--dim);margin-top:10px}
+.canedit .rempty{display:none}
+.lb{position:fixed;inset:0;z-index:90;background:rgba(18,11,6,.9);display:grid;place-items:center;padding:16px;cursor:zoom-out}
+.lb img{max-height:90vh;border-radius:12px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:95;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:.9rem}
+body.present .top,body.present .dots,body.present .editbar{display:none!important}
+body.present section.ch{min-height:100vh;display:flex;align-items:center;scroll-snap-align:start}
+html.present{scroll-snap-type:y mandatory}
+.pbar{position:fixed;right:16px;bottom:16px;z-index:60;display:none;gap:6px;align-items:center;background:var(--ink);color:var(--paper);padding:6px;border-radius:12px;font:700 .75rem var(--mono)}
+body.present .pbar{display:flex}
+.pbar button{border:0;background:#3A2A1E;color:#fff;border-radius:8px;padding:6px 10px}
+.editbar{position:fixed;left:16px;bottom:16px;z-index:50;background:var(--ink);color:var(--paper);font:700 .72rem var(--mono);letter-spacing:.08em;padding:8px 12px;border-radius:10px;display:none}
+.canedit body.present .top,body.present .dots,body.present .editbar{display:none!important}
+body.present section.ch{min-height:100vh;display:flex;align-items:center;scroll-snap-align:start}
+html.present{scroll-snap-type:y mandatory}
+.pbar{position:fixed;right:16px;bottom:16px;z-index:60;display:none;gap:6px;align-items:center;background:var(--ink);color:var(--paper);padding:6px;border-radius:12px;font:700 .75rem var(--mono)}
+body.present .pbar{display:flex}
+.pbar button{border:0;background:#3A2A1E;color:#fff;border-radius:8px;padding:6px 10px}
+.editbar{display:block}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* concept film */
+.concept{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:34px;align-items:center;margin-top:34px;padding:26px;border-radius:24px;background:linear-gradient(150deg,#2E2118,#1A120C 70%);border:1px solid #4A3828}
+.cv-vid{position:relative;border-radius:20px;overflow:hidden;background:#000;aspect-ratio:9/16;box-shadow:0 30px 60px -25px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.06)}
+.cv-vid video{display:block;width:100%;height:100%;object-fit:cover;background:#000}
+.cv-len{position:absolute;top:12px;left:12px;font:700 .68rem var(--mono);letter-spacing:.08em;padding:5px 9px;border-radius:8px;background:rgba(0,0,0,.6);color:#fff;backdrop-filter:blur(6px);pointer-events:none}
+.cv-copy h3{color:#fff;font-size:clamp(1.4rem,2.6vw,2rem);margin-top:14px}
+.cv-copy p{color:#E3D3C0}
+.cv-note{display:grid;gap:4px;margin-top:16px;padding:14px 16px;border-radius:14px;background:#FFF8EF;color:var(--ink);border-left:5px solid var(--orange)}
+.cv-note b{font:700 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--orange2)}
+.cv-note em{font-style:normal;font-weight:700;color:var(--orange2)}
+.cv-pts{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:8px;color:#E3D3C0;font-size:.94rem}
+.cv-pts li{display:flex;gap:10px;align-items:baseline}
+.cv-pts i{font:700 .7rem var(--mono);font-style:normal;color:var(--sun)}
+.vref .vh span{float:right;color:var(--sun)}
+.vref video{max-height:640px}
+@media (max-width:820px){.concept{grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:20px;padding:18px}}
+@media (max-width:600px){.concept{grid-template-columns:1fr;padding:16px}.cv-vid{max-width:300px;margin:0 auto;width:100%}}
+
+
+/* type emphasis */
+.cap{text-transform:uppercase;letter-spacing:.01em}
+.fm{font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--orange2);white-space:nowrap}
+.dark .fm{color:var(--sun)}
+mark{background:linear-gradient(transparent 58%,rgba(242,107,15,.22) 0);color:inherit;padding:0 .08em;font-weight:600}
+.dark mark{background:linear-gradient(transparent 58%,rgba(249,181,30,.28) 0)}
+.hl{color:var(--orange)}
+.dark .hl{color:var(--sun)}
+.hing .hl,.hing h3 em{color:var(--orange2);font-style:normal}
+.side h3{letter-spacing:.01em}
+.together q{text-transform:none}
+.diag.d3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.dg b .cap{font:700 .66rem var(--mono);letter-spacing:.14em;color:var(--orange2)}
+.cat{margin-top:18px;padding:20px 22px;border-radius:18px;background:var(--ink);color:var(--paper)}
+.cat-k{font:700 .66rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A8927D}
+.cat-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.cat-row span{font:700 .78rem var(--mono);letter-spacing:.06em;padding:7px 11px;border-radius:999px;background:#2E2118;border:1px solid #4A3828;color:#E8D9C6;text-decoration:line-through;text-decoration-color:rgba(242,107,15,.7)}
+.cat p{margin:14px 0 0;font:700 clamp(1.05rem,2vw,1.35rem)/1.35 var(--display);max-width:none}
+.cat mark{background:none;color:var(--sun);font-weight:700}
+.hing .hg{grid-template-columns:1fr;gap:8px}
+.hing .hg>div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:baseline}
+@media (max-width:820px){.hing .hg>div{grid-template-columns:1fr;gap:2px}}
+/* sticky script switcher */
+.tabbar{position:sticky;top:58px;z-index:25;display:flex;align-items:center;gap:12px;margin:14px -12px 16px;padding:10px 12px;border-radius:16px;background:rgba(30,20,12,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid transparent;transition:border-color .25s,box-shadow .25s}
+.tabbar.stuck{border-color:#4A3828;box-shadow:0 14px 30px -14px rgba(0,0,0,.8)}
+.tabbar .tabs{margin:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.tabbar .tabs button{white-space:nowrap;flex:none}
+.tb-k{font:700 .62rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A8927D;flex:none}
+body.present .tabbar{top:0}
+@media (max-width:820px){.diag.d3{grid-template-columns:1fr}.tb-k{display:none}.tabbar{margin-inline:-8px;padding:8px}}
+
+/* references, made obvious */
+.refs{border:2px dashed var(--orange)!important;background:#FFF4E6!important;padding:20px!important;position:relative}
+.dark .refs{border-color:rgba(249,181,30,.55)!important;background:rgba(249,181,30,.06)!important}
+.refs .rh{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.refs .rtag{flex:none;font:800 .8rem var(--mono)!important;letter-spacing:.14em;color:#fff!important;background:var(--orange);padding:7px 12px;border-radius:10px;box-shadow:0 8px 18px -10px rgba(242,107,15,.9)}
+.refs .rht{flex:1;min-width:220px;display:grid;gap:3px}
+.refs .rht b{font:800 1.1rem/1.25 var(--display)!important;letter-spacing:-.01em!important;text-transform:none!important;color:var(--ink)!important}
+.refs .rht span{font-size:.92rem!important;color:var(--ink2)!important}
+.refs .rht em{font-style:normal;font-weight:700;color:var(--orange2)}
+.dark .refs .rht b{color:#fff!important}
+.dark .refs .rht span{color:#E3D3C0!important}
+.dark .refs .rht em{color:var(--sun)}
+.rimg::before{content:"REF";position:absolute;top:8px;left:8px;z-index:2;font:800 .6rem var(--mono);letter-spacing:.12em;padding:3px 6px;border-radius:6px;background:var(--orange);color:#fff}
+.rimg img{cursor:zoom-in}
+.rempty{font-size:.95rem!important;margin-top:14px!important}
+
+/* ===== round 6 ===== */
+/* video play button */
+.vwrap{position:relative}
+.vplay{position:absolute;inset:0;z-index:3;border:0;background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.05),rgba(0,0,0,.45));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:opacity .3s}
+.vp-c{width:92px;height:92px;border-radius:50%;background:var(--orange);display:grid;place-items:center;box-shadow:0 0 0 0 rgba(242,107,15,.6),0 18px 40px -12px rgba(0,0,0,.8);animation:vring 1.8s ease-out infinite;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.vp-c svg{width:40px;height:40px;fill:#fff;margin-left:6px}
+.vp-t{font:800 .78rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.55);padding:6px 12px;border-radius:999px}
+.vplay:hover .vp-c{transform:scale(1.1)}
+@keyframes vring{70%{box-shadow:0 0 0 22px rgba(242,107,15,0),0 18px 40px -12px rgba(0,0,0,.8)}100%{box-shadow:0 0 0 0 rgba(242,107,15,0),0 18px 40px -12px rgba(0,0,0,.8)}}
+.playing .vplay{opacity:0;pointer-events:none}
+.vref .vwrap{background:#000}
+
+/* money hook card, smaller */
+.proof{padding:22px 24px!important;max-width:920px;margin-inline:auto}
+.pf-grid{grid-template-columns:96px minmax(0,1fr)!important;gap:20px!important;margin-top:12px!important}
+.proof .lgimg{width:96px;height:96px;border-radius:18px}
+.proof .lgph{font-size:.82rem}
+.pf-main h3{font-size:clamp(1.25rem,2.2vw,1.75rem)!important}
+.pf-main p{font-size:.95rem!important;margin-top:8px!important}
+.pf-vs{margin-top:16px!important}
+.pf-vs>div{padding:12px 14px!important}
+.pf-vs b{font-size:.92rem!important}
+.pf-vs span{font-size:.84rem!important}
+.pf-close{font-size:.98rem!important;margin-top:14px!important}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:95;background:rgba(14,9,5,.94);display:grid;grid-template-columns:64px minmax(0,1fr) 64px;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;padding:14px;cursor:default}
+.lb-top{grid-column:1/-1;justify-self:stretch;display:flex;align-items:center;gap:12px;color:#fff}
+.lb-tag{font:800 .72rem var(--mono);letter-spacing:.14em;background:var(--orange);padding:6px 10px;border-radius:8px}
+.lb-n{font:700 .85rem var(--mono);color:#E8D9C6}
+.lb-x{margin-left:auto;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:1.1rem}
+.lb-fig{margin:0;display:grid;place-items:center;min-height:0;grid-row:2;grid-column:2}
+.lb-fig img{max-width:100%;max-height:calc(100vh - 210px);border-radius:12px;object-fit:contain;box-shadow:0 30px 60px -20px #000}
+.lb-fig figcaption{color:#B7A28C;font-size:.82rem;margin-top:8px;text-align:center}
+.lb-nav{grid-row:2;align-self:center;width:56px;height:56px;border-radius:50%;border:0;background:#fff;color:var(--ink);font:400 2.2rem/1 var(--body);display:grid;place-items:center;box-shadow:0 10px 30px -10px #000;transition:transform .2s}
+.lb-nav:hover{transform:scale(1.1);background:var(--orange);color:#fff}
+.lb-nav.prev{grid-column:1}.lb-nav.next{grid-column:3}
+.lb-strip{grid-column:1/-1;justify-self:stretch;display:flex;gap:8px;overflow-x:auto;justify-content:safe center;padding:4px 2px;scrollbar-width:none}
+.lb-strip button{flex:none;width:58px;height:72px;border-radius:8px;overflow:hidden;border:2px solid transparent;padding:0;background:#000;opacity:.5;transition:opacity .2s,border-color .2s}
+.lb-strip button.on{opacity:1;border-color:var(--orange)}
+.lb-strip img{width:100%;height:100%;object-fit:cover}
+.lb.single .lb-nav,.lb.single .lb-strip{visibility:hidden}
+@media (max-width:820px){.lb{grid-template-columns:44px minmax(0,1fr) 44px;padding:10px}.lb-nav{width:42px;height:42px;font-size:1.7rem}}
+
+/* demo-script note + sticky label */
+.demo-note{display:flex;gap:14px;align-items:flex-start;margin:14px 0 4px;padding:14px 16px;border-radius:14px;background:rgba(249,181,30,.1);border:1px solid rgba(249,181,30,.45)}
+.dn-k{flex:none;font:800 .72rem var(--mono);letter-spacing:.12em;text-transform:uppercase;background:var(--sun);color:var(--ink);padding:6px 10px;border-radius:8px}
+.demo-note p{margin:0;color:#F3E6D4;font-size:.98rem}
+.demo-note b{color:var(--sun)}
+.tabbar .tb-k{display:inline-block!important;font:800 .7rem var(--mono)!important;letter-spacing:.12em;color:var(--ink)!important;background:var(--sun);padding:7px 10px;border-radius:9px;box-shadow:0 6px 14px -8px rgba(249,181,30,.9)}
+.tabbar.stuck{border-color:var(--sun)!important}
+.stkbar{background:rgba(30,20,12,.92)}
+.stkbar .tabs button{font-size:.8rem;padding:7px 11px}
+
+/* stakes callout */
+.tapnote{display:flex;gap:14px;align-items:center;margin-top:12px;padding:14px 18px;border-radius:16px;background:var(--orange);color:#fff;box-shadow:0 14px 30px -16px rgba(242,107,15,.9)}
+.tapnote b{font-weight:800}
+.tn-i{font-size:1.6rem;animation:tap 1.4s ease-in-out infinite}
+@keyframes tap{50%{transform:translateY(5px) scale(.92)}}
+
+/* why it works */
+.wiw{margin-top:26px;padding:24px 26px;border-radius:22px;position:relative;overflow:hidden}
+.wiw-k{display:inline-block;font:800 .74rem var(--mono);letter-spacing:.16em;text-transform:uppercase;padding:6px 11px;border-radius:9px}
+.wiw h3{font-size:clamp(1.3rem,2.6vw,2rem);line-height:1.2;margin:14px 0 10px;max-width:30ch}
+.wiw h3 em{font-style:normal}
+.wiw p{margin:0;max-width:72ch;font-size:1.02rem}
+.wiw-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.wiw-tags span{font:800 .72rem var(--mono);letter-spacing:.1em;padding:7px 11px;border-radius:999px}
+.film-w{background:linear-gradient(135deg,#F9B51E,#F26B0F);color:var(--ink)}
+.film-w .wiw-k{background:var(--ink);color:var(--sun)}
+.film-w h3 em{color:#fff;text-shadow:0 2px 0 rgba(30,20,12,.25)}
+.film-w p{color:#2A1A0E}
+.film-w .wiw-tags span{background:var(--ink);color:#fff}
+.game-w{background:var(--ink);color:var(--paper);border:2px solid var(--orange)}
+.game-w .wiw-k{background:var(--orange);color:#fff}
+.game-w h3{color:#fff}.game-w h3 em{color:var(--sun)}
+.game-w p{color:#E3D3C0}
+.game-w .wiw-tags span{background:#2E2118;color:var(--sun);border:1px solid #4A3828}
+.spw{margin:0 0 16px;padding:12px 14px;border-radius:12px;font-size:.95rem;line-height:1.45}
+.spw b{display:block;font:800 .66rem var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+.spw u{text-decoration:none;font-weight:800}
+.side.film .spw{background:var(--sun);color:var(--ink)}
+.side.game .spw{background:#fff;color:var(--ink)}
+.side.game .spw u{color:var(--orange2)}
+
+/* game layout: phone + flow side by side, reasons full width below */
+.stage{align-items:center!important}
+.gwhy{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:26px}
+.gwhy>div{align-content:start}
+
+/* ===== the phone ===== */
+.phone{isolation:isolate;max-width:350px!important}
+.phone .sky{overflow:hidden;z-index:0}
+.phone .sky>*{position:absolute;pointer-events:none}
+.phone .rays{inset:-60%;background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(255,255,255,.13) 0 7deg,transparent 7deg 18deg);animation:spin 50s linear infinite}
+@keyframes spin{to{transform:rotate(1turn)}}
+.phone .cloud{width:90px;height:28px;border-radius:30px;background:rgba(255,255,255,.85);filter:blur(.4px)}
+.phone .cloud::before{content:"";position:absolute;width:44px;height:36px;border-radius:50%;background:inherit;left:16px;top:-16px}
+.phone .c1{top:120px;left:-100px;animation:drift 26s linear infinite}
+.phone .c2{top:84px;left:-100px;transform:scale(.7);animation:drift 34s linear infinite -12s;opacity:.8}
+.phone .c3{top:170px;left:-100px;transform:scale(.55);animation:drift 40s linear infinite -25s;opacity:.7}
+@keyframes drift{to{translate:520px 0}}
+.phone .fl{font-size:1.3rem;opacity:.55;animation:bob 5s ease-in-out infinite}
+.phone .f1{left:8%;top:44%}.phone .f2{right:7%;top:40%;animation-delay:-1.4s}.phone .f3{left:44%;top:30%;animation-delay:-2.6s;font-size:1rem}.phone .f4{right:20%;top:56%;animation-delay:-3.4s;font-size:1rem}
+@keyframes bob{50%{transform:translateY(-10px) rotate(8deg)}}
+.phone .jet{font-size:1.3rem;top:104px;left:-40px;animation:jet 11s linear infinite}
+@keyframes jet{0%{transform:translate(0,30px) rotate(-12deg)}100%{transform:translate(440px,-30px) rotate(-12deg)}}
+.phone .spot,.phone .wall,.phone .floor{display:none}
+.phone .floor{display:block;left:-10%;right:-10%;bottom:0;height:42%;background:radial-gradient(70% 60% at 50% 30%,rgba(255,255,255,.18),transparent 70%)}
+
+/* theme A: golden hour */
+.th-sun .sky{background:linear-gradient(180deg,#2B1A5C 0,#7A2E66 26%,#F26B0F 58%,#FFC46B 78%,#F7D9A6 100%)}
+.th-sun .sky::after{content:"";position:absolute;left:50%;top:44%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:radial-gradient(circle,#FFE8A3 0,#FFC14D 45%,rgba(255,150,40,0) 70%);animation:glow 4s ease-in-out infinite}
+@keyframes glow{50%{transform:scale(1.12)}}
+/* theme B: game-show studio */
+.th-show .sky{background:radial-gradient(120% 70% at 50% 100%,#3A1D5E 0,#140B24 60%,#07040E 100%)}
+.th-show .rays,.th-show .cloud,.th-show .jet{display:none}
+.th-show .spot{display:block;top:-20%;width:46%;height:120%;background:linear-gradient(180deg,rgba(255,220,120,.55),rgba(255,220,120,0) 80%);clip-path:polygon(45% 0,55% 0,100% 100%,0 100%);mix-blend-mode:screen;transform-origin:50% 0}
+.th-show .s1{left:2%;animation:sweep 5s ease-in-out infinite alternate}
+.th-show .s2{right:2%;background:linear-gradient(180deg,rgba(255,92,184,.55),rgba(255,92,184,0) 80%);animation:sweep 6s ease-in-out infinite alternate-reverse}
+@keyframes sweep{from{transform:rotate(-18deg)}to{transform:rotate(18deg)}}
+.th-show .sky::after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.35) 1px,transparent 1.6px);background-size:16px 16px;mask:linear-gradient(180deg,#000 0,transparent 45%);-webkit-mask:linear-gradient(180deg,#000 0,transparent 45%);animation:twinkle 2.4s steps(2) infinite}
+@keyframes twinkle{50%{opacity:.5}}
+.th-show .floor{background:linear-gradient(180deg,rgba(255,255,255,0),rgba(242,107,15,.25)),repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 34px)}
+.th-show .fl{opacity:.3}
+.th-show .sb{box-shadow:0 0 0 2px #FF5CB8,0 0 24px rgba(255,92,184,.6)!important}
+/* theme C: real set (wall + garden) */
+.th-set .sky{background:linear-gradient(180deg,#9FD3F2 0,#CDE9F7 30%,#7CB46B 62%,#5E9A50 100%)}
+.th-set .rays,.th-set .fl,.th-set .jet{display:none}
+.th-set .cloud{background:#fff}
+.th-set .wall{display:block;left:0;right:0;top:34%;height:30%;background-color:#B4573A;background-image:linear-gradient(rgba(255,255,255,.18) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.18) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.18) 2px,transparent 2px);background-size:100% 18px,36px 36px,36px 36px;background-position:0 0,0 0,18px 18px;box-shadow:inset 0 -10px 20px rgba(0,0,0,.2)}
+.th-set .floor{background:linear-gradient(180deg,#C9B79C,#A89274);height:40%;bottom:0;box-shadow:inset 0 10px 18px rgba(0,0,0,.18)}
+
+/* scoreboard */
+.phone .sb{position:absolute;z-index:3;top:12px;left:10px;right:10px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;background:rgba(18,11,6,.72);backdrop-filter:blur(6px);border-radius:16px;padding:6px 8px;box-shadow:0 8px 20px -10px #000}
+.sbp{display:flex;align-items:center;gap:6px;min-width:0}
+.sbp.b{justify-content:flex-end}
+.sbp b{font:800 .62rem var(--mono);letter-spacing:.08em;color:#fff}
+.mini{width:30px;height:30px;border-radius:50%;overflow:hidden;flex:none;display:block;border:2px solid #fff}
+.sbp.a .mini{background:#6FA0FF}.sbp.b .mini{background:#FFB37A}
+.mini svg{width:100%;height:100%;display:block}
+.mini.good{animation:up .5s}.mini.bad{animation:dn .5s}
+.phone .sb .sc{font:900 1.05rem var(--display);background:#fff;color:var(--ink);border-radius:8px;padding:1px 9px;min-width:34px;text-align:center}
+.phone .tm{position:static!important;transform:none!important;font-size:1.05rem!important;padding:3px 10px!important;box-shadow:0 3px 0 var(--orange)!important}
+.phone .tm.low{animation:tmpulse .6s infinite alternate!important}
+@keyframes tmpulse{to{transform:scale(1.1)}}
+.phone .stk{z-index:3;top:62px!important;font:800 .66rem var(--mono)!important;letter-spacing:.1em;background:#FFD23F!important;color:var(--ink);border-radius:10px;padding:5px 8px!important;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.phone .stk small{display:block;font:700 .56rem var(--mono);letter-spacing:.08em;opacity:.75;margin-top:1px}
+
+/* players */
+.phone .pl{z-index:2;top:104px;bottom:auto!important;width:46%!important;--load:0;display:flex;flex-direction:column;align-items:center}
+.phone .pl.a{left:2%!important}.phone .pl.b{right:2%!important}
+.fig{width:100%;max-width:140px;animation:sway calc(3.4s - var(--load)*.3s) ease-in-out infinite;transform-origin:50% 100%}
+@keyframes sway{50%{transform:rotate(calc(1.5deg + var(--load)*.6deg))}}
+.figsvg{width:100%;height:auto;display:block;overflow:visible}
+.figsvg .load{transform:translateY(calc(var(--load)*3px));transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.eyes{transform-origin:60px 55px;animation:blink 4.2s infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+.brow path{stroke:#1A110B;stroke-width:3;stroke-linecap:round;fill:none;transition:transform .2s}
+.m{opacity:0;transition:opacity .15s}.m-n{opacity:1}
+.good .m-n,.bad .m-n{opacity:0}.good .m-h{opacity:1}.bad .m-s{opacity:1}
+.bad .brow path:first-child{transform:rotate(-12deg);transform-origin:48px 45px}.bad .brow path:last-child{transform:rotate(12deg);transform-origin:72px 45px}
+.pl.good .fig{animation:hop .5s}.pl.bad .fig{animation:wob .5s}
+@keyframes hop{40%{transform:translateY(-12px)}}
+@keyframes wob{25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
+.phone .bag{position:absolute;top:auto!important;bottom:calc(36% - var(--load)*3px);left:50%;transform:translateX(-50%);width:60%;min-height:0!important;margin:0!important;z-index:3;justify-content:center;transition:bottom .5s}
+.phone .bag i{width:8px!important;height:18px!important;background:linear-gradient(#CDEBFF,#6FB6F2)!important;border-radius:3px 3px 2px 2px}
+.tagnm{margin-top:-2px;font:800 .56rem var(--mono);letter-spacing:.08em;color:#fff;background:rgba(18,11,6,.65);padding:3px 7px;border-radius:999px;white-space:nowrap}
+.pl.b .tagnm{background:var(--orange)}
+.you{position:absolute;top:-16px;font:900 .62rem var(--mono);letter-spacing:.1em;color:var(--ink);background:#fff;padding:3px 7px;border-radius:7px;animation:bob 1.4s ease-in-out infinite;z-index:4}
+.pl.soaked .fig{filter:saturate(.7) brightness(.9)}
+.pl.soaked::after{content:"💦";position:absolute;top:0;font-size:2rem;animation:drop .6s}
+.bucket{position:absolute;top:96px;font-size:2.6rem;transform:translateX(-50%);animation:tip 1.2s ease-in-out forwards;z-index:5}
+@keyframes tip{0%{transform:translate(-50%,-60px)}40%{transform:translate(-50%,0) rotate(0)}70%,100%{transform:translate(-50%,0) rotate(150deg)}}
+.pops{position:absolute;inset:0;pointer-events:none;z-index:5}
+.pop{position:absolute;top:230px;transform:translateX(-50%);font:900 1.2rem var(--display);padding:4px 10px;border-radius:10px;animation:popup 1.1s ease-out forwards;white-space:nowrap}
+.pop.g{background:#3FD08E;color:#fff}.pop.b{background:#FF6B6B;color:#fff}
+@keyframes popup{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}20%{opacity:1;transform:translate(-50%,-10px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-60px)}}
+.phone.shake{animation:shk .35s}
+@keyframes shk{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* question: caption style like the references */
+.phone .qcard{z-index:4;background:linear-gradient(180deg,rgba(18,11,6,0),rgba(18,11,6,.82) 22%)!important;left:0!important;right:0!important;bottom:0!important;border-radius:0 0 24px 24px!important;padding:26px 12px 12px!important;color:#fff!important}
+.qn{font:800 .6rem var(--mono);letter-spacing:.14em;color:#FFD23F}
+.phone .qcard .qq{font:900 1.02rem/1.2 var(--display)!important;text-transform:uppercase;color:#fff;text-shadow:0 2px 0 #000,0 0 12px rgba(0,0,0,.6);margin:2px 0 10px!important}
+.phone .qcard .op button{border:0!important;background:#fff;color:var(--ink)!important;border-radius:12px!important;padding:8px 12px!important;font:700 .84rem var(--body)!important;box-shadow:0 4px 0 #C9B79C;transition:transform .12s}
+.phone .qcard .op button:hover{background:#FFD23F!important;transform:translateY(-1px)}
+.phone .qcard .op button.ok{background:#3FD08E!important;color:#fff!important;box-shadow:0 4px 0 #1F9D6B}
+.phone .qcard .op button.no{background:#FF6B6B!important;color:#fff!important;box-shadow:0 4px 0 #C93C3C}
+.phone .over{z-index:8}.phone .aud{z-index:7}
+.phone .splash{z-index:6}
+
+.say{position:absolute;top:-6px;left:50%;transform:translateX(-50%);z-index:4;font:900 .74rem var(--display);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;text-shadow:0 2px 0 #000,0 0 8px rgba(0,0,0,.7);animation:popin .25s cubic-bezier(.3,1.6,.5,1)}
+.say.ok{color:#5CFF7A}.say.no{color:#FF5C5C}
+.pl.b .say{top:10px}
+@keyframes popin{from{transform:translateX(-50%) scale(.4);opacity:0}}
+.realnote{max-width:360px;margin:10px auto 0;padding:12px 14px;border-radius:14px;background:#fff;border:1px solid var(--line);font-size:.88rem;color:var(--ink2);box-shadow:var(--sh1)}
+.realnote b{display:block;color:var(--ink);margin-bottom:2px}
+.why b .hl{color:var(--orange)!important;display:inline!important;font-size:inherit!important}
+.dark .why b .hl{color:var(--sun)!important}
+
+/* ===== phone v2: question first, glass UI ===== */
+.phone .sb{top:10px!important;background:rgba(18,12,8,.42)!important;backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 10px 24px -14px #000!important}
+.phone .qcard{top:58px!important;bottom:auto!important;left:10px!important;right:10px!important;border-radius:22px!important;padding:12px 12px 10px!important;
+  background:rgba(18,12,8,.40)!important;backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 18px 36px -18px rgba(0,0,0,.9)!important;transition:opacity .25s,transform .25s}
+.phone .qcard:empty{opacity:0;transform:translateY(-8px)}
+.qn{display:flex;justify-content:space-between;align-items:center;font:800 .58rem var(--mono)!important;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)!important}
+.qn .qh{color:#FFD23F}
+.phone .qcard .qq{font:800 1.12rem/1.25 var(--body)!important;text-transform:none!important;letter-spacing:-.01em;color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.5)!important;margin:6px 0 10px!important;animation:qin .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes qin{from{opacity:0;transform:translateY(6px)}}
+.phone .qcard .op{gap:7px!important}
+.phone .qcard .op button{display:flex!important;align-items:center;gap:10px;width:100%;text-align:left;
+  background:rgba(255,255,255,.16)!important;color:#fff!important;border:1px solid rgba(255,255,255,.3)!important;border-radius:14px!important;padding:8px 10px!important;
+  font:700 .9rem var(--body)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:background .15s,transform .12s}
+.phone .qcard .op button i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:800 .72rem var(--mono);font-style:normal;background:rgba(255,255,255,.9);color:var(--ink)}
+.phone .qcard .op button:hover{background:rgba(255,255,255,.3)!important;transform:translateY(-1px)}
+.phone .qcard .op button:active{transform:scale(.98)}
+.phone .qcard .op button.ok{background:rgba(52,199,89,.75)!important;border-color:rgba(160,255,180,.7)!important}
+.phone .qcard .op button.ok i{background:#fff;color:#1F9D6B}
+.phone .qcard .op button.no{background:rgba(255,69,58,.75)!important;border-color:rgba(255,170,160,.7)!important}
+.phone .qcard .op button.no i{background:#fff;color:#C93C3C}
+.phone .qcard .op button:disabled:not(.ok):not(.no){opacity:.5}
+/* players move down, smaller */
+.phone .pl{top:auto!important;bottom:40px!important;width:42%!important}
+.phone .pl.a{left:5%!important}.phone .pl.b{right:5%!important}
+.fig{max-width:122px!important}
+/* stake chip at the bottom */
+.phone .stk{top:auto!important;bottom:10px!important;left:50%!important;right:auto!important;transform:translateX(-50%);white-space:nowrap;font-size:.6rem!important;padding:5px 10px!important;border-radius:999px!important;background:rgba(255,210,63,.92)!important}
+.phone .stk small{display:inline!important;margin-left:6px}
+.tagnm{font-size:.52rem!important}
+.pop{top:auto!important;bottom:230px}
+.bucket{top:auto!important;bottom:250px}
+
+/* theme: evening garden */
+.phone .moon,.phone .trees,.phone .lights{display:none}
+.th-garden .sky{background:linear-gradient(180deg,#191541 0,#3B2266 22%,#8E3B76 40%,#E0716B 54%,#F6A766 62%,#2F5A3A 63%,#2A5034 100%)}
+.th-garden .rays,.th-garden .cloud,.th-garden .jet{display:none}
+.th-garden .moon{display:block;top:62px;right:26px;width:34px;height:34px;border-radius:50%;background:#FFF4D6;box-shadow:0 0 30px 8px rgba(255,236,190,.45)}
+.th-garden .trees{display:block;left:-10%;right:-10%;top:44%;height:22%;
+  background:radial-gradient(40px 46px at 6% 70%,#1B3A26 98%,transparent),radial-gradient(56px 60px at 20% 62%,#16301F 98%,transparent),radial-gradient(44px 50px at 36% 74%,#1D3F29 98%,transparent),radial-gradient(64px 66px at 54% 60%,#132A1B 98%,transparent),radial-gradient(46px 50px at 72% 72%,#1B3A26 98%,transparent),radial-gradient(60px 62px at 88% 62%,#16301F 98%,transparent),linear-gradient(transparent 70%,#1B3A26 70%)}
+.th-garden .lights{display:block;left:0;width:100%;top:40%;height:50px}
+.th-garden .lights circle{fill:#FFD98A;filter:drop-shadow(0 0 4px #FFC14D);animation:fairy 2.2s ease-in-out infinite}
+@keyframes fairy{50%{fill:#FFF3CF;opacity:.55}}
+.th-garden .fl{font-size:0!important;width:6px;height:6px;border-radius:50%;background:#E8FF8A;box-shadow:0 0 10px 3px rgba(220,255,120,.7);opacity:.9!important;animation:firefly 6s ease-in-out infinite}
+.th-garden .f1{top:66%!important}.th-garden .f2{top:58%!important}.th-garden .f3{top:72%!important}.th-garden .f4{top:62%!important}
+@keyframes firefly{25%{transform:translate(14px,-12px);opacity:.3}50%{transform:translate(-6px,-24px);opacity:1}75%{transform:translate(-16px,-6px);opacity:.4}}
+.th-garden .floor{display:block;height:37%;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 26px,transparent 26px 52px),linear-gradient(180deg,#3E7444,#2A5531);box-shadow:inset 0 14px 24px rgba(0,0,0,.25)}
+.th-garden .sky::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 30% at 50% 60%,rgba(255,190,120,.25),transparent 70%)}
+/* fixes */
+.phone .stk small{opacity:.7}
+.pop{bottom:180px!important}
+.th-garden .sky{background:linear-gradient(180deg,#191541 0,#3B2266 26%,#8E3B76 46%,#E0716B 58%,#F6A766 66%,#2F5A3A 67%,#2A5034 100%)!important}
+.th-garden .trees{top:49%!important;height:20%!important}
+.th-garden .lights{top:50%!important}
+.th-garden .moon{top:51%!important;right:14px!important;width:26px!important;height:26px!important}
+.th-garden .floor{height:33%!important}
+.pop{bottom:110px!important}
+#qwrap,#scwrap{scroll-margin-top:66px}
+
+/* comment-problem blocks */
+.cfix{margin-top:26px;padding:24px;border-radius:22px;display:grid;gap:20px}
+.cf-k{display:inline-block;font:800 .72rem var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:6px 11px;border-radius:9px;background:var(--orange);color:#fff}
+.cf-head h3{font-size:clamp(1.25rem,2.4vw,1.8rem);margin:12px 0 8px;line-height:1.2}
+.cf-head h3 em{font-style:normal}
+.cf-head p{margin:0;max-width:72ch}
+.cf-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.cf-tags span{font:800 .7rem var(--mono);letter-spacing:.1em;padding:6px 10px;border-radius:999px}
+.cf-vs{display:grid;grid-template-columns:minmax(0,.8fr) 36px minmax(0,1.2fr);gap:12px;align-items:stretch}
+.cf-col{border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.cf-col small{font:800 .64rem var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.cf-col em{font-style:normal;font-size:.76rem;opacity:.7;margin-top:auto}
+.cf-chips{display:flex;flex-wrap:wrap;gap:6px}
+.cf-chips span{font:700 .8rem var(--mono);padding:5px 9px;border-radius:8px;text-decoration:line-through;text-decoration-color:rgba(242,107,15,.7)}
+.cf-arrow{display:grid;place-items:center;font:900 1.6rem var(--display);color:var(--orange)}
+.cf-c{background:#fff;color:var(--ink);border-radius:14px 14px 14px 4px;padding:9px 12px;font-size:.92rem;box-shadow:0 6px 14px -10px rgba(0,0,0,.5)}
+.cf-c b{display:block;font:700 .72rem var(--mono);color:var(--orange2);margin-bottom:2px}
+.film-c{background:rgba(255,255,255,.04);border:1px solid #4A3828}
+.film-c .cf-head h3{color:#fff}.film-c .cf-head h3 em{color:var(--sun)}
+.film-c .cf-head p{color:#E3D3C0}
+.film-c .cf-tags span{background:#2E2118;color:var(--sun);border:1px solid #4A3828}
+.film-c .old{background:#2A1E15;color:#B7A28C;border:1px dashed #4A3828}
+.film-c .old .cf-chips span{background:#3A2B1F;color:#B7A28C}
+.film-c .new{background:rgba(249,181,30,.1);color:#F3E6D4;border:1px solid rgba(249,181,30,.4)}
+.game-c{background:#fff;border:2px solid var(--orange);box-shadow:var(--sh1)}
+.game-c .cf-head h3 em{color:var(--orange)}
+.game-c .cf-head p{color:var(--ink2)}
+.game-c .cf-tags span{background:var(--ink);color:var(--sun)}
+.game-c .old{background:var(--paper2);color:var(--ink2);border:1px dashed var(--line)}
+.game-c .old .cf-chips span{background:#fff}
+.game-c .new{background:var(--ink);color:#E8D9C6}
+.cf-col.old .cf-chips{flex:1;align-content:center;justify-content:center;gap:10px;padding:10px 0}
+.cf-col.old .cf-chips span{font-size:1.05rem;padding:9px 14px;border-radius:12px 12px 12px 3px;transform:rotate(var(--r,0deg))}
+.cf-col.old .cf-chips span:nth-child(odd){--r:-3deg}.cf-col.old .cf-chips span:nth-child(3n){--r:2deg}
+@media (max-width:820px){.cf-vs{grid-template-columns:1fr}.cf-arrow{transform:rotate(90deg)}.cfix{padding:16px}}
+
+/* comment blocks: compact */
+.cfix{padding:16px 18px!important;gap:12px!important;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;margin-top:18px!important}
+.cf-k{font-size:.62rem!important;padding:4px 8px!important}
+.cf-head h3{font-size:clamp(1.02rem,1.6vw,1.25rem)!important;margin:8px 0 6px!important}
+.cf-head p{font-size:.88rem!important;line-height:1.45}
+.cf-tags{margin-top:8px!important;gap:5px!important}
+.cf-tags span{font-size:.58rem!important;padding:4px 7px!important}
+.cf-vs{grid-template-columns:minmax(0,.7fr) 20px minmax(0,1.3fr)!important;gap:8px!important}
+.cf-col{padding:10px!important;gap:6px!important}
+.cf-col small{font-size:.54rem!important}
+.cf-col em{font-size:.66rem!important}
+.cf-col.old .cf-chips{padding:4px 0!important;gap:5px!important}
+.cf-col.old .cf-chips span{font-size:.72rem!important;padding:4px 8px!important}
+.cf-arrow{font-size:1.1rem!important}
+.cf-c{padding:6px 9px!important;font-size:.8rem!important}
+.cf-c b{font-size:.6rem!important}
+@media (max-width:820px){.cfix{grid-template-columns:1fr}.cf-vs{grid-template-columns:1fr!important}}
+.gwhy{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+@media (max-width:820px){.gwhy{grid-template-columns:1fr!important}.gwhy>div:last-child{grid-column:auto}}
+.vfb{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:center;margin-top:10px;font-size:.82rem;color:#B7A28C}
+.vfb a{font-weight:700;color:var(--sun);text-decoration:none;border:1px solid rgba(249,181,30,.5);padding:5px 10px;border-radius:999px}
+.vfb.show{color:#fff}.vfb.show a{background:var(--orange);color:#fff;border-color:var(--orange)}
+.cv-vid + .vfb{max-width:320px}
+.vplay{inset:0 0 56px 0!important}
+.hasplay video{object-fit:contain!important;background:#000}
+.cv-colv{min-width:0}
+.tabs button .sn{font:800 .72rem var(--mono);font-style:normal;margin-right:7px;opacity:.75}
+.tabs button[aria-selected="true"] .sn{opacity:1}
+.scnum{font:800 .66rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--orange2);margin:-4px 0 4px}
+.over .ovnote{font-size:.76rem!important;color:#FFD23F!important;margin-top:-4px!important}
+.qlegend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0 4px}
+.qlegend>div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--sh1)}
+.qlegend p{margin:8px 0 0;font-size:.86rem;color:var(--ink2)}
+.qlegend b{color:var(--ink)}
+.tagq.bn{background:var(--sun);color:var(--ink)}
+@media (max-width:820px){.qlegend{grid-template-columns:1fr}}
+.kinds{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+.kinds-h{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.kinds-h p{margin:0;color:#E3D3C0;font-size:1rem}
+.kinds-h b{color:var(--sun)}
+.kind{position:relative;padding:20px 20px 18px;border-radius:20px;border:1px solid #4A3828;background:rgba(255,255,255,.04)}
+.kind .kn{font:900 1.6rem var(--display);color:var(--orange);line-height:1}
+.kind h3{color:#fff;font-size:clamp(1.2rem,2vw,1.5rem);margin:8px 0 8px}
+.kind h3 em{font-style:normal;color:var(--sun)}
+.kind p{margin:0;color:#E3D3C0;font-size:.95rem}
+.k2{border-color:rgba(249,181,30,.45);background:rgba(249,181,30,.07)}
+.kex{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.kex button{font:700 .78rem var(--body);color:#fff;background:#2E2118;border:1px solid #4A3828;border-radius:999px;padding:6px 11px;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.kex button:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-2px)}
+@media (max-width:820px){.kinds{grid-template-columns:1fr}}
+.kinds-h{flex-direction:column;align-items:flex-start!important;gap:8px!important}
+.kbig{color:#fff;font-size:clamp(1.4rem,2.8vw,2.1rem);line-height:1.15;max-width:30ch;margin:4px 0 2px}
+.kbig em{font-style:normal;color:var(--sun)}
+.kb{color:var(--sun);font-weight:800}
+.vol{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);gap:16px;margin-top:16px;padding:22px;border-radius:20px;background:#fff;border:2px solid var(--ink);box-shadow:var(--sh1)}
+.vol-big{display:flex;align-items:center;gap:14px}
+.vol-n{white-space:nowrap;font:900 clamp(2.4rem,4.6vw,3.6rem)/1 var(--display);color:var(--orange);letter-spacing:-.03em}
+.vol-l{font:800 1.1rem/1.2 var(--display)}
+.vol-l small{display:block;font:600 .85rem var(--body);color:var(--ink2);margin-top:4px}
+.vol-pts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.vol-pts>div{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px}
+.vol-pts b{display:block;font:800 .95rem var(--display)}
+.vol-pts span{font-size:.84rem;color:var(--ink2)}
+.mx.t{background:var(--plum)!important}
+.bl{display:grid;grid-template-columns:minmax(0,1fr) 30px minmax(0,1.15fr) 30px minmax(0,1fr);gap:10px;margin-top:30px;align-items:stretch}
+.bl-c{border-radius:20px;padding:20px;box-shadow:var(--sh1)}
+.bl-c small{font:800 .66rem var(--mono);letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.bl-c h3{margin:8px 0 10px;font-size:1.2rem}
+.bl-c ul{margin:0;padding-left:18px;display:grid;gap:8px;font-size:.92rem}
+.mk1{background:var(--paper2);border:1px dashed var(--line);color:var(--ink2)}
+.mk1 h3{color:var(--ink)}
+.mk2{background:var(--ink);color:#E8D9C6}.mk2 h3{color:#fff}.mk2 b{color:var(--sun)}
+.mk3{background:var(--orange);color:#fff}.mk3 small{opacity:.9}
+.bl-ar{display:grid;place-items:center;font:900 1.6rem var(--display);color:var(--orange)}
+.bl-q{text-align:center;margin-top:30px}
+.bl-q q{font:900 clamp(1.3rem,2.8vw,2.1rem)/1.2 var(--display);quotes:none;letter-spacing:-.02em}
+.bl-q span{color:var(--orange)}
+@media (max-width:820px){.vol,.vol-pts{grid-template-columns:1fr}.bl{grid-template-columns:1fr}.bl-ar{transform:rotate(90deg)}}
+.bignum{font:900 1.35em var(--display);color:var(--sun)}
+.loop{margin-top:22px;padding:22px;border-radius:20px;background:#fff;border:2px solid var(--ink);box-shadow:var(--sh1)}
+.loop-h{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.lp-k{font:800 .74rem var(--mono);letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--sun);padding:7px 11px;border-radius:9px}
+.loop-h p{margin:0;color:var(--ink2)}
+.loop-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px;counter-reset:x}
+.loop-steps>div{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px}
+.loop-steps>div:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);font:900 1rem var(--display);color:var(--orange);z-index:1}
+.loop-steps i{font:900 1.3rem var(--display);font-style:normal;color:var(--orange)}
+.loop-steps b{display:block;font:800 1rem var(--display);margin:4px 0 2px}
+.loop-steps span{font-size:.86rem;color:var(--ink2)}
+.loop-steps .up{background:#E8F8EF;border-color:#9FDDBB}.loop-steps .up i{color:#1F9D6B}
+.loop-steps .dn{background:#FDECEA;border-color:#F3B4AC}.loop-steps .dn i{color:#C93C3C}
+@media (max-width:820px){.loop-steps{grid-template-columns:1fr}.loop-steps>div:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-14px;transform:translateX(-50%)}}
+/* money hook card: compact */
+.proof{max-width:780px!important;padding:16px 18px!important;margin-top:22px!important;border-radius:18px!important}
+.proof::after{width:160px!important;height:160px!important;right:-50px!important;top:-50px!important}
+.proof .pk{font-size:.6rem!important}
+.pf-grid{grid-template-columns:64px minmax(0,1fr)!important;gap:14px!important;margin-top:8px!important}
+.proof .lgimg{width:64px!important;height:64px!important;border-radius:14px!important}
+.proof .lgph{font-size:.6rem!important}
+.pf-main h3{font-size:clamp(1.05rem,1.6vw,1.3rem)!important}
+.pf-main p{font-size:.85rem!important;margin-top:4px!important;line-height:1.45}
+.pf-vs{margin-top:10px!important;gap:8px!important;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr)!important}
+.pf-vs>div{padding:8px 11px!important;border-radius:12px!important}
+.pf-vs small{font-size:.54rem!important}
+.pf-vs b{font-size:.82rem!important;margin:2px 0!important}
+.pf-vs span{font-size:.76rem!important}
+.vs-arrow{font-size:1rem!important}
+.pf-close{font-size:.86rem!important;margin-top:10px!important}
+.cv-tag{display:inline-flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;margin:22px 0 0;padding:12px 18px;border-radius:14px;background:var(--ink);color:var(--paper);font:700 clamp(1rem,1.8vw,1.3rem)/1.3 var(--display);box-shadow:0 14px 30px -18px rgba(30,20,12,.7);max-width:none}
+.cv-tag span{opacity:.75}
+.cv-tag b{color:var(--sun)}
+.editbar{display:none;align-items:center;gap:10px}
+.canedit .editbar{display:flex!important}
+.editbar button{font:800 .7rem var(--body);background:var(--sun);color:var(--ink);border:0;border-radius:8px;padding:6px 10px;cursor:pointer}
+.showedit{position:fixed;left:12px;bottom:12px;z-index:50;font:700 .62rem var(--mono);background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:4px 8px;opacity:.35;cursor:pointer}
+.showedit:hover{opacity:1}
+.whyh{margin-top:30px}
+.whyh .wiw-k{background:var(--sun);color:var(--ink)}
+.whyh + .why{margin-top:12px}
+#loop .loop{margin-top:6px}
+/* theme switch (owner only) */
+.thsw{display:none;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.canedit .thsw{display:flex}
+.thsw span{width:100%;text-align:center;font:700 .62rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.thsw button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 11px;font:700 .76rem var(--body);color:var(--ink)}
+.thsw button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.phone .rays,.phone .cloud,.phone .jet,.phone .fl,.fig,.th-show .spot{animation:none!important}}
+/* identity chapter */
+.idn{background:linear-gradient(180deg,var(--paper) 0,#FFF1DE 100%)}
+.era{margin-top:36px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px}
+.era-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.era-k{font:700 .7rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.era-sw{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--paper2);border-radius:999px;padding:4px;min-width:min(380px,100%)}
+.era-sw button{position:relative;z-index:1;border:0;background:none;padding:9px 14px;border-radius:999px;font-weight:700;font-size:.86rem;color:var(--ink2);transition:color .3s}
+.era-sw button[aria-selected="true"]{color:#fff}
+.era-sw i{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--orange);box-shadow:0 6px 16px -6px rgba(242,107,15,.7);transition:transform .45s cubic-bezier(.2,.8,.2,1),background .3s}
+.era-sw.then i{background:var(--ink)}
+.era-sw:not(.then) i{transform:translateX(100%)}
+.era-rows{margin-top:16px;display:grid;gap:8px}
+.er{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:center;padding:14px 16px;border-radius:14px;background:var(--paper);border:1px solid var(--line);position:relative;overflow:hidden}
+.erk{font:700 .7rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.er .t,.er .n{grid-column:2;grid-row:1;font-weight:600;font-size:1.02rem;transition:opacity .4s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.er .t{color:var(--ink2);text-decoration:line-through;text-decoration-color:rgba(30,20,12,.25)}
+.er .n{color:var(--ink)}
+.era-rows[data-on="now"] .t{opacity:0;transform:translateY(-14px)}
+.era-rows[data-on="then"] .n{opacity:0;transform:translateY(14px)}
+.era-rows[data-on="then"] .t{text-decoration:none;color:var(--ink)}
+.era-rows[data-on="now"] .er{border-left:4px solid var(--orange)}
+.era-rows[data-on="then"] .er{border-left:4px solid var(--ink)}
+.er:nth-child(2) span{transition-delay:.05s}.er:nth-child(3) span{transition-delay:.1s}.er:nth-child(4) span{transition-delay:.15s}.er:nth-child(5) span{transition-delay:.2s}
+.idh{margin-top:48px;font-size:clamp(1.25rem,2.2vw,1.6rem)}
+.th3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.th3>div{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px}
+.th3 .no{font:900 1.6rem var(--display);color:var(--orange);display:block;line-height:1}
+.th3 b{display:block;margin-top:12px;font-size:1.05rem}
+.th3 p{margin:6px 0 0;color:var(--ink2);font-size:.94rem}
+.eq{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr) 28px minmax(0,1fr) 28px minmax(0,1.15fr);gap:8px;align-items:stretch;margin-top:18px}
+.eq .op{display:grid;place-items:center;font:900 1.6rem var(--display);color:var(--orange)}
+.eqc{border-radius:18px;padding:18px;border:1px solid var(--line);background:#fff;display:flex;flex-direction:column;gap:6px}
+.eqc small{font:700 .64rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.eqc b{font:800 1.05rem/1.2 var(--display)}
+.eqc span{font-size:.9rem;color:var(--ink2)}
+.eqc.g{border-top:5px solid var(--blue)}.eqc.f{border-top:5px solid var(--plum)}.eqc.c{border-top:5px solid var(--sun)}
+.eqc.r{background:var(--orange);border-color:var(--orange);color:#fff}
+.eqc.r small,.eqc.r span{color:#FFE6D2}
+.first{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:30px;align-items:center;margin-top:48px;padding:28px;border-radius:24px;background:var(--ink);color:var(--paper)}
+.first .kick b{background:var(--orange);color:#fff}
+.first h3{color:#fff;font-size:clamp(1.3rem,2.4vw,1.85rem);margin-top:14px;line-height:1.2}
+.first p{color:#E3D3C0}
+.map{position:relative;aspect-ratio:1.25;border-radius:18px;background:#2A1E15;border:1px solid #4A3828;overflow:hidden;
+  background-image:linear-gradient(#3A2B1F 1px,transparent 1px),linear-gradient(90deg,#3A2B1F 1px,transparent 1px);background-size:25% 25%}
+.map .arrow{position:absolute;inset:0;width:100%;height:100%}
+.map .arrow path{stroke-dashoffset:0;animation:dash 14s linear infinite}
+.ax{position:absolute;font:700 .62rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#A8927D}
+.ax.y{left:10px;top:10px}.ax.x{right:10px;bottom:28px}
+.mapn{position:absolute;left:10px;bottom:8px;font-size:.7rem;color:#8C7764}
+.pt{position:absolute;transform:translate(-50%,-50%);border:0;border-radius:999px;padding:6px 11px 6px 22px;font:700 .74rem var(--body);white-space:nowrap;background:#3A2B1F;color:#E8D9C6;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.pt::before{content:"";position:absolute;left:8px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#8C7764}
+.pt.now{background:#4A3220;color:#fff}.pt.now::before{background:var(--sun)}
+.pt.next{background:var(--orange);color:#fff;box-shadow:0 0 0 6px rgba(242,107,15,.18),0 10px 30px -8px rgba(242,107,15,.8);animation:ptpulse 2.4s ease-in-out infinite}
+.pt.next::before{background:#fff}
+@keyframes ptpulse{50%{box-shadow:0 0 0 12px rgba(242,107,15,.06),0 10px 30px -8px rgba(242,107,15,.8)}}
+.pt:hover,.pt:focus-visible,.pt.tipon{transform:translate(-50%,-50%) scale(1.08);z-index:3}
+.pt[data-tip]:hover::after,.pt.tipon::after{content:attr(data-tip);position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%);background:#FFF8EF;color:var(--ink);padding:7px 10px;border-radius:10px;font:500 .78rem var(--body);white-space:nowrap;box-shadow:0 12px 24px -10px rgba(0,0,0,.7);z-index:4}
+.pt.next[data-tip]:hover::after,.pt.next.tipon::after{top:auto;bottom:calc(100% + 8px);left:auto;right:0;transform:none}
+@media (max-width:820px){.pt.next{left:64%!important}.era-sw{min-width:100%}.era-sw button{font-size:.76rem;padding:9px 6px}.er{grid-template-columns:1fr;gap:4px}.er .t,.er .n{grid-column:1;grid-row:2}.th3{grid-template-columns:1fr}.eq{grid-template-columns:1fr}.eq .op{padding:2px 0}.first{grid-template-columns:1fr;padding:18px}.pt{font-size:.66rem;padding:5px 8px 5px 18px}.pt::before{left:6px}.pt[data-tip]:hover::after,.pt.tipon::after{white-space:normal;width:180px}}
+
+/* ===== interaction layer ===== */
+:root{--sh1:0 1px 2px rgba(30,20,12,.06),0 6px 16px -8px rgba(30,20,12,.18);--sh2:0 2px 4px rgba(30,20,12,.06),0 22px 40px -18px rgba(30,20,12,.38)}
+.stat,.mk,.dg,.why div,.flow div,.phase,.mx,.oven,.evolve,.gap,.proof,.hing,.bars,.rimg,.rlist li,.stake,.concept,.split>*,.together,.pp,.qrow,.day,.week{box-shadow:var(--sh1);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .25s,background-color .25s}
+.hov{position:relative;isolation:isolate}
+.hov::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;opacity:0;transition:opacity .3s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(242,107,15,.13),transparent 70%)}
+.dark .hov::after,.hov.dk::after{background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(249,181,30,.16),transparent 70%)}
+@media (hover:hover){
+  .hov:hover{transform:translateY(-4px);box-shadow:var(--sh2);border-color:var(--orange)}
+  .hov:hover::after{opacity:1}
+  .why div.hov:hover::before{transform:scale(1.25)}
+  .rlist li:hover{transform:translateX(4px)}
+  .bars:hover .brow{opacity:.45}
+  .bars .brow:hover{opacity:1}
+  .brow:hover .tr i{filter:brightness(1.12);box-shadow:0 0 0 3px rgba(242,107,15,.18)}
+  .brow:hover .blg .lgimg{transform:scale(1.12) rotate(-4deg)}
+  .stat.hov:hover .v{color:var(--orange)}
+  .tabs button:hover{border-color:var(--orange);color:#fff;transform:translateY(-2px)}
+  .top nav a:hover{background:var(--paper2);color:var(--ink)}
+  .dots a:hover{background:var(--orange2);transform:scale(1.3)}
+  .cv-vid:hover{transform:scale(1.015)}
+  .chip:hover{transform:translateY(-1px);box-shadow:var(--sh1)}
+}
+.why div::before{display:inline-block;transition:transform .3s}
+.brow{transition:opacity .25s;border-radius:10px}
+.blg .lgimg,.cv-vid,.tabs button,.chip,.dots a{transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .2s,color .2s,background .2s}
+.press{animation:press .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes press{40%{transform:scale(.97)}}
+button:active,.btn:active,.stake:active{transform:scale(.97)!important}
+.ripple{position:absolute;border-radius:50%;pointer-events:none;background:rgba(242,107,15,.28);transform:scale(0);animation:rip .6s ease-out forwards;z-index:5}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+.fx{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
+.fx.in{opacity:1;transform:none}
+h2 em{background:linear-gradient(transparent 62%,rgba(242,107,15,.18) 0) no-repeat 0 0/0% 100%;transition:background-size 1s .3s cubic-bezier(.2,.8,.2,1)}
+.dark h2 em{background-image:linear-gradient(transparent 62%,rgba(249,181,30,.22) 0)}
+.in h2 em,h2.in em{background-size:100% 100%}
+.scrollbar{position:fixed;left:0;top:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--orange);z-index:60;pointer-events:none}
+@media (prefers-reduced-motion:reduce){.fx{opacity:1;transform:none;transition:none}.hov:hover{transform:none}}
+body.present .fx{opacity:1;transform:none}
+</style>
+
+<div id="root">
+<header class="top"><div class="wrap">
+  <div class="brand">YAAS <span>×</span> Cleartrip</div>
+  <nav id="topnav">
+    <a href="#where">Where we are</a><a href="#market">The market</a><a href="#plan">The plan</a><a href="#films">Short films</a><a href="#game">The game</a><a href="#loop">Feedback loop</a>
+  </nav>
+</div></header>
+<div class="dots" id="dots"></div>
+
+<section class="ch cover" id="cover">
+  <div class="wrap">
+    <div class="from">A content strategy for <b>@clearlytripping</b> <i></i> from YAAS · October 2026</div>
+    <h1>Clearly Tripping,<br><span class="o">re-routed.</span></h1>
+    <p class="cv-tag"><span>Distribution can be bought.</span> <b>Identity has to be built.</b></p>
+    <div class="cta-row"><button class="btn" id="presentBtn" type="button">▶ Present</button><a class="btn ghost" href="#where">Scroll through ↓</a><a class="btn ghost" href="#game">Try the game</a></div>
+  </div>
+  <svg class="route" viewBox="0 0 660 460" aria-hidden="true">
+    <path class="dash" d="M20 420 C 180 300, 260 380, 380 230 S 560 80, 620 40" fill="none" stroke="#F26B0F" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="20" cy="420" r="9" fill="#1E140C"/><circle cx="620" cy="40" r="11" fill="#F26B0F"/><circle cx="620" cy="40" r="20" fill="none" stroke="#F26B0F" stroke-width="2" opacity=".4"/>
+    <g class="plane"><path d="M14 0 L-8 -7 L-4 0 L-8 7 Z M2 0 L-4 -12 L-7 -12 L-3 0 L-7 12 L-4 12 Z" fill="#1E140C"/></g>
+  </svg>
+</section>
+
+<section class="ch" id="where"><div class="wrap">
+  <div class="kick"><b>01</b> Where we are</div>
+  <h2>The <span class="cap">audience</span> loves us.<br><em>Now let's make it <span class="cap">travel</span> further.</em></h2>
+  <p class="lede">Clearly Tripping already <mark>out-engages every big travel brand</mark> on Instagram. The next step is turning that love into more <mark>reach</mark> and more <mark>real conversation</mark>. That's what this plan is built for.</p>
+  <div class="stats">
+    <div class="stat"><div class="v" data-count="445" data-suf="K">0</div><div class="k">Followers</div><p>A real, earned audience across 514 posts.</p></div>
+    <div class="stat"><div class="v" data-count="0.32" data-suf="%">0</div><div class="k">Engagement rate</div><p>Over 6× MakeMyTrip and Goibibo (0.05% each).</p></div>
+    <div class="stat"><div class="v" data-count="1.2" data-suf="K">0</div><div class="k">Avg likes / post</div><p>MakeMyTrip, with 141K more followers, averages 130.</p></div>
+    <div class="stat warn"><div class="v" data-count="160" data-suf="">0</div><div class="k">Avg comments / post</div><p>Mostly 1-word keyword replies. Volume, not conversation.</p></div>
+  </div>
+  <div class="bars" id="bars">
+    <h4>Engagement rate vs the category</h4><small>Clearly Tripping: 18 Oct 2026 · MakeMyTrip &amp; Goibibo: Social Blade, 11 Oct 2026</small>
+    <div class="brow"><label class="blg" data-logo="logo-clearlytripping" data-ph="CT" data-alt="Clearly Tripping logo" style="--bc:#FF6F1F"><span class="lgimg"></span><input type="file" accept="image/*" hidden data-rfile="logo-clearlytripping"></label><span>Clearly Tripping</span><div class="tr"><i data-w="100"></i></div><span class="n">0.32%</span></div>
+    <div class="brow old"><label class="blg" data-logo="logo-makemytrip" data-ph="mmt" data-alt="MakeMyTrip logo" style="--bc:#E8303A"><span class="lgimg"></span><input type="file" accept="image/*" hidden data-rfile="logo-makemytrip"></label><span>MakeMyTrip · 586K</span><div class="tr"><i data-w="15.6"></i></div><span class="n">0.05%</span></div>
+    <div class="brow old"><label class="blg" data-logo="logo-goibibo" data-ph="go" data-alt="Goibibo logo" style="--bc:#2C6FE0"><span class="lgimg"></span><input type="file" accept="image/*" hidden data-rfile="logo-goibibo"></label><span>Goibibo · 250K</span><div class="tr"><i data-w="15.6"></i></div><span class="n">0.05%</span></div>
+  </div>
+  <div class="diag">
+    <div class="dg"><b><span class="cap">Strength</span> · People care</b><span>Over 6× the category's engagement means the audience is listening. We're not starting from zero. We're starting from <mark>trust</mark>.</span></div>
+    <div class="dg"><b><span class="cap">Gap</span> · Comments without conversation</b><span>Most Reels end on "comment the keyword". It brings 1-word replies, not people talking to each other, and <mark>the algorithm knows the difference</mark> between the two.</span></div>
+    <div class="dg"><b><span class="cap">Gap</span> · Reach beyond followers</b><span>The biggest hits (30M, 7.6M views) are older posts. Right now, the content <mark>isn't travelling far enough</mark> past the people who already follow us.</span></div>
+    <div class="dg"><b><span class="cap">Gap</span> · No signature</b><span>Every Reel uses the same studio host and stock B-roll. Nothing says <mark>"this is Clearly Tripping"</mark> before the logo does.</span></div>
+  </div>
+  <p class="note">Followers: 19 Oct 2026. Engagement, likes, comments and posts: 18 Oct 2026. Competitor figures: Social Blade, 11 Oct 2026. Reach and view figures: public audit of the 17 newest Reels, 3 Oct 2026.</p>
+</div></section>
+<section class="ch" id="market"><div class="wrap">
+  <div class="kick"><b>02</b> The market</div>
+  <h2>Every travel page sounds<br><em>the <span class="cap">same</span> right now.</em></h2>
+  <p class="lede">Look across the big travel brands on Instagram and the playbook repeats. It works for a sale week. It doesn't build a page anyone <mark>looks forward to</mark>.</p>
+  <div class="market">
+    <div class="mk"><div class="ic">🏷️</div><h3>OFFERS &amp; sale banners</h3><p>Fare drops, coupon codes, "lowest prices ever". Useful, forgettable, and identical across apps.</p></div>
+    <div class="mk"><div class="ic">📋</div><h3>LISTICLES</h3><p>"5 places to visit in…" with stock drone shots. The format every page and every creator already owns.</p></div>
+    <div class="mk"><div class="ic">🤝</div><h3>CREATOR COLLABS</h3><p>Borrowed faces and borrowed audiences. The reach belongs to <mark>the creator, not the brand</mark>.</p></div>
+    <div class="mk"><div class="ic">🎙️</div><h3>Studio TALKING HEADS</h3><p>Safe, informative, polite. The format Clearly Tripping is in today, <mark>along with everyone else</mark>.</p></div>
+  </div>
+  <div class="gap"><div class="big">Nobody in Indian travel owns <em>stories people feel</em> or <em>a game people play</em>. That's the opening.</div></div>
+</div></section>
+<section class="ch" id="plan"><div class="wrap">
+  <div class="kick"><b>03</b> The plan</div>
+  <h2><span class="cap">2 formats.</span><br><em>2 jobs. 1 identity.</em></h2>
+  <p class="lede">1 format, <b class="fm">THE GAME</b>, earns the <mark>views and comments</mark>. The other, <b class="fm">SHORT FILMS</b>, increases the <mark>trust</mark> that makes people remember who made it. Each covers what the other can't.</p>
+  <div class="split">
+    <div class="side film"><div class="lab">Format 01</div><h3>SHORT FILMS</h3>
+      <div class="spw"><b>Why it works</b>Makes Cleartrip a <u>serious player</u> with real stakes in travel, not another page that sounds like everyone else. It builds <u>identity</u>.</div>
+      <dl><div><dt>Length</dt><dd><b>60–90 seconds max</b></dd></div><div><dt>Job</dt><dd>Build trust and identity</dd></div>
+      <div><dt>Viewer feels</dt><dd>"This understood me." or "Wait, that's a real place?"</dd></div>
+      <div><dt>Travel's role</dt><dd>The supporting character, never the hero</dd></div>
+      <div><dt>Measured by</dt><dd>Shares, saves, rewatches, sentiment</dd></div></dl></div>
+    <div class="side game"><div class="lab">Format 02</div><h3>THE GAME</h3>
+      <div class="spw"><b>Why it works</b>Built for <u>dopamine</u>, <u>retention</u> and short attention spans. Travel comes in sideways, so it never feels like gyaan.</div>
+      <dl><div><dt>Length</dt><dd><b>45–60 seconds max</b></dd></div><div><dt>Job</dt><dd>Views, retention, comments, reach</dd></div>
+      <div><dt>Viewer feels</dt><dd>"Wait, WHAT?" and "I'd have won that."</dd></div>
+      <div><dt>Travel's role</dt><dd>Hidden inside every question</dd></div>
+      <div><dt>Measured by</dt><dd>Watch time, comments, non-follower reach</dd></div></dl></div>
+  </div>
+</div></section>
+<section class="ch dark" id="films"><div class="wrap">
+  <div class="fhead"><div>
+    <div class="kick"><b>04</b> Format 01 · SHORT FILMS</div>
+    <h2>Cinematic <span class="cap">short films</span> where<br><em>travel plays a supporting role.</em></h2><div class="dur">⏱ 1 minute, 1.5 minutes max</div></div>
+    <p class="lede"><mark>Conversations between friends</mark>, sometimes just 2 people and sometimes a whole group. Nothing is sold. The viewer gets hooked on the conversation, and <mark>the trip becomes their idea</mark>.</p>
+  </div>
+  <div class="kinds">
+    <div class="kinds-h"><h3 class="kbig">Stories that <em>hit home</em>, and conversations about <em>places so unbelievable you just want to go there.</em></h3></div>
+    <div class="kind k1"><span class="kn">01</span><h3>Stories that <em>hit home</em></h3><p>Relatable, sometimes emotional. The trip with your parents that keeps getting pushed. The saved folder you never visit. The colleague who's somehow always on holiday. The viewer sees their own life, and the trip is the way out.</p><div class="kex"><button type="button" data-film-jump="filter">Filter Nahi Hai ↗</button><button type="button" data-film-jump="saved">The Saved Travel Folder ↗</button><button type="button" data-film-jump="salary">Same Salary, Six Countries ↗</button></div></div>
+    <div class="kind k2"><span class="kn">02</span><h3>Places you <em>won't believe</em></h3><p><b class="kb">Banter, curiosity, wanderlust.</b> A real place that sounds made up: a town where you can't die, a village with no doors, a country near Australia where Diwali is a national holiday. 1 friend refuses to believe it, the other knows the story, and by the end they're booking.</p><div class="kex"><button type="button" data-film-jump="nodie">The Town Where You Can't Die ↗</button><button type="button" data-film-jump="nodoors">The Village With No Doors ↗</button><button type="button" data-film-jump="fiji">Diwali in the Pacific ↗</button><button type="button" data-film-jump="sanskrit">The Sanskrit Village ↗</button></div></div>
+  </div>
+  <div class="refs" data-slot="format-films"></div>
+  <div class="concept fx">
+    <div class="cv-colv"><div class="cv-vid"><video src="videos/concept-film.mp4" poster="videos/poster.jpg" controls playsinline preload="metadata"></video><span class="cv-len">≈ 2.5 min</span></div></div>
+    <div class="cv-copy">
+      <span class="kick" style="margin:0"><b>Watch first</b> Concept film</span>
+      <h3>This is how the format feels.</h3>
+      <p>A <b>concept film</b> we made to show the <b>vibe</b>: the conversation, the pace, the way travel sits quietly inside the story instead of being sold.</p>
+      <div class="cv-note"><b>Heads up on length</b><span>This concept runs about 2.5 minutes so you can feel the story fully. The films we publish will be <em>1 minute, 1.5 minutes max</em>. Same soul, tighter cut.</span></div>
+      <ul class="cv-pts"><li><i>01</i>Watch it for the tone and the story, not the runtime.</li><li><i>02</i>It's a concept. The final films are shot, cast and cut for Reels.</li></ul>
+    </div>
+  </div>
+  <div class="whyh"><span class="wiw-k">★ Why it works</span></div>
+  <div class="why">
+    <div><p style="margin:0"><b>Nobody likes being sold to. Everyone likes being <span class="hl">understood</span>.</b><span>The feed has trained people to skip anything that looks like an ad. A son who keeps saying "baad mein le jaunga" doesn't feel like an ad. It feels like you.</span></p></div>
+    <div><p style="margin:0"><b>Conversational scripts <span class="hl">build identity</span>.</b><span>Real conversations, natural Hinglish and cinematic frames turn a deals page into a brand people recognise: the one that understands why Indians travel, from the parents' first trip to the trip the friend group never takes.</span></p></div>
+    <div><p style="margin:0"><b>It gets <span class="hl">shared</span>, not just watched.</b><span>Stories spread through DMs: "bhai ye tu hai", tagging the friend who keeps cancelling. That reach is earned, and the talking head never gets it.</span></p></div>
+  </div>
+  <div class="cfix film-c">
+    <div class="cf-head"><span class="cf-k">💬 Fixes the comment problem</span><h3>Stories make people <em>talk</em>, not just type a keyword.</h3><p>Right now most comments are 1-word keyword replies. A story people see themselves in pulls out real replies: they share their own version, they get emotional, and they tag the friend the film is about. That's <mark>conversation</mark>, and conversation is what the algorithm rewards.</p><div class="cf-tags"><span>EMOTIONS</span><span>PERSONAL STORIES</span><span>TAGS &amp; DMs</span><span>CONVERSATIONS</span></div></div>
+    <div class="cf-vs">
+      <div class="cf-col old"><small>Today · "comment the keyword"</small><div class="cf-chips"><span>GOA</span><span>LINK</span><span>GOA</span><span>🔥</span><span>PRICE?</span><span>GOA</span></div><em>1 word. No conversation. The algorithm can tell.</em></div>
+      <div class="cf-arrow">→</div>
+      <div class="cf-col new"><small>What this format gets people saying</small><div class="cf-c"><b>@riya.k</b>bhai ye literally main hoon. 3 saal se "next year pakka" bol raha hoon 😭</div><div class="cf-c"><b>@kabir_s</b>@aman ye tera wala scene hai, mummy ko le ja is baar</div><em>Illustrative comments, to show the kind of replies we're designing for.</em></div>
+    </div>
+  </div>
+  <div class="hing">
+    <div class="hl"><span class="kick" style="margin:0"><b>Short films · Why Hinglish</b></span><h3>SHORT FILMS speak the language our audience <em>actually talks in.</em></h3><p>SHORT FILMS are written in <b>Hinglish</b>, on purpose. (THE GAME stays in <b>English</b>, for quick, universal play-along.)</p></div>
+    <div class="hg">
+      <div><b><span class="hl">Broader reach</span></b><span>Pages covering the same topics we've covered, in Hinglish, reached far more people than our English versions. Same idea, bigger audience.</span></div>
+      <div><b><span class="hl">It still reads tier 1</span></b><span>Cinematic framing, real writing and premium visuals keep it aspirational. Hinglish is how urban India speaks to friends, so the audience stays the one Cleartrip wants.</span></div>
+      <div><b><span class="hl">It feels real</span></b><span>Nobody argues with their best friend in textbook English. The emotion only lands if the dialogue sounds like a real conversation.</span></div>
+      <div><b><span class="hl">Better targeted, not just bigger</span></b><span>Beautiful short films in the language people think in. No other travel brand is doing this, so Cleartrip owns it.</span></div>
+    </div>
+  </div>
+  <div class="proof">
+    <div class="pf-top"><span class="pk">Proof it works · A YAAS client</span></div>
+    <div class="pf-grid">
+      <div class="lg" data-logo="moneyhook-logo"><div class="lgimg"></div><label class="lgup">Add logo<input type="file" accept="image/*" hidden data-rfile="moneyhook-logo"></label></div>
+      <div class="pf-main">
+        <h3>The Money Hook did this <em>for money.</em></h3>
+        <p>Personal finance is the most lecture-heavy category on Instagram. The Money Hook built a serious identity in it with cinematic, story-driven conversations instead of tips and charts.</p>
+      </div>
+    </div>
+    <div class="pf-vs">
+      <div class="vs-a"><small>The category</small><b>Tips, charts, lectures</b><span>Informative. Interchangeable. Forgotten by the next swipe.</span></div>
+      <div class="vs-arrow">→</div>
+      <div class="vs-b"><small>The Money Hook</small><b>Stories, characters, cinema</b><span>Recognised on sight, and trusted as a voice.</span></div>
+    </div>
+    <p class="pf-close">We built that playbook. <b>Clearly Tripping is the same move for travel.</b></p>
+  </div>
+  <h3 class="scripts-h">The scripts <span>Tap a title to switch. The bar stays with you while you read.</span></h3>
+  <div class="demo-note"><span class="dn-k">📝 Demo scripts</span><p>These <b class="bignum">7</b> are <b>demo scripts</b>, written on our <b>initial concepts</b> for the format. They're here to show the tone, the structure and how travel slips into a real conversation.</p></div>
+  <div class="scwrap" id="scwrap">
+    <div class="tabbar"><span class="tb-k">📜 SCRIPTS</span><div class="tabs" id="filmTabs" role="tablist"></div></div>
+    <div id="filmView"></div>
+  </div>
+  <h3 style="margin-top:34px;color:#fff">In the pipeline</h3>
+  <div class="pipeline">
+    <div class="pp"><small>Next up</small><b>Leaves Lapse</b>The unused leave that quietly disappears every year.<i>✈ Travel: the leave-planning hack, turning 4 days into a 9-day trip around long weekends.</i></div>
+    <div class="pp"><small>Next up</small><b>Mumma Papa ka Honeymoon</b>The trip your parents never got to take.<i>✈ Travel: kids gift their parents the honeymoon they skipped (Kashmir, Kerala, Udaipur).</i></div>
+    <div class="pp"><small>Next up</small><b>Tatkal 9:59</b>1 minute before the booking window opens.<i>✈ Travel: the festival-home rush; booking early on Cleartrip as the calm way out.</i></div>
+    <div class="pp"><small>Next up</small><b>52 Weekends</b>How many weekends you actually get in a year.<i>✈ Travel: weekend getaways under 300 km, so the year doesn't slip by.</i></div>
+    <div class="pp"><small>Next up</small><b>Singapore's airport has a waterfall inside</b>The airport people plan a layover around.<i>✈ Travel: Jewel Changi, and Singapore as the easy first international trip (or a layover worth extending).</i></div>
+    <div class="pp"><small>Next up</small><b>Rome's fountain makes over a million euros a year</b>All the coins people throw into the Trevi.<i>✈ Travel: the "toss a coin, you'll come back" legend, and Rome for first-timers.</i></div>
+    <div class="pp"><small>Next up</small><b>The Eiffel Tower was supposed to be demolished</b>Built to stand for 20 years. It never came down.<i>✈ Travel: Paris beyond the selfie, through the story behind the landmark.</i></div>
+  </div>
+</div></section>
+<section class="ch game" id="game"><div class="wrap">
+  <div class="kick"><b>05</b> Format 02 · THE GAME</div>
+  <h2><span class="cap">The game:</span> a travel quiz<br><em>built for dopamine.</em></h2><div class="dur">⏱ 45–60 seconds max</div>
+  <p class="lede">Kadesh and Minal. A <mark>45–60 second timer</mark>. A live score over their heads. <mark>Stakes</mark> that get worse with every wrong answer, and a <mark>punishment</mark> waiting for the loser. Nobody wants a lesson every day. Everyone wants to see who gets the ice bucket.</p>
+  <div class="wiw game-w">
+    <span class="wiw-k">⚡ Why it works</span>
+    <h3>Built for <em>dopamine</em>, <em>retention</em> and today's <em>attention span</em>. It talks about travel <em>without talking about travel</em>.</h3>
+    <p>Stakes in frame 1, a ticking clock and a score that keeps swinging: the viewer's brain has a reason to stay till the last second. They play along, so it feels like a game, not content. Travel comes in through the questions, so nobody feels like they're getting gyaan.</p>
+    <div class="wiw-tags"><span>DOPAMINE</span><span>RETENTION</span><span>ATTENTION SPAN</span><span>PLAY-ALONG</span><span>ZERO GYAAN</span></div>
+  </div>
+  <div class="stage">
+    <div>
+      <div class="phone th-show" id="phone" aria-label="Playable game demo">
+        <div class="sky" aria-hidden="true"><i class="rays"></i><i class="cloud c1"></i><i class="cloud c2"></i><i class="cloud c3"></i><span class="fl f1">🧳</span><span class="fl f2">🗺️</span><span class="fl f3">🏝️</span><span class="fl f4">🎟️</span><span class="jet">✈️</span><i class="moon"></i><i class="trees"></i><svg class="lights" viewBox="0 0 340 60" preserveAspectRatio="none"><path d="M-5 8 Q85 52 170 22 T345 12" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1"/><g><circle cx="14" cy="18" r="3.2" style="animation-delay:-0.00s"/><circle cx="42" cy="30" r="3.2" style="animation-delay:-0.37s"/><circle cx="70" cy="38" r="3.2" style="animation-delay:-0.74s"/><circle cx="98" cy="40" r="3.2" style="animation-delay:-1.11s"/><circle cx="126" cy="34" r="3.2" style="animation-delay:-1.48s"/><circle cx="154" cy="26" r="3.2" style="animation-delay:-1.85s"/><circle cx="182" cy="21" r="3.2" style="animation-delay:-2.22s"/><circle cx="210" cy="22" r="3.2" style="animation-delay:-2.59s"/><circle cx="238" cy="26" r="3.2" style="animation-delay:-2.96s"/><circle cx="266" cy="24" r="3.2" style="animation-delay:-3.33s"/><circle cx="294" cy="18" r="3.2" style="animation-delay:-3.70s"/><circle cx="322" cy="13" r="3.2" style="animation-delay:-4.07s"/></g></svg><i class="spot s1"></i><i class="spot s2"></i><i class="wall"></i><i class="floor"></i></div>
+        <div class="sb"><div class="sbp a"><span class="mini" data-face="k"></span><b>KADESH</b><span class="sc" id="sA">0</span></div><div class="tm" id="tm">0:45</div><div class="sbp b"><span class="sc" id="sB">0</span><b>MINAL</b><span class="mini" data-face="m"></span></div></div>
+        <div class="stk" id="stk">🎒 HEAVY BAGGAGE<small>+1 L per wrong answer</small></div>
+        <div class="pl a" id="pA"><div class="bag" id="bA"></div><div class="fig" data-fig="k"></div><div class="tagnm">KADESH · plays himself</div></div>
+        <div class="pl b" id="pB"><div class="bag" id="bB"></div><div class="fig" data-fig="m"></div><div class="tagnm">MINAL · YOU</div></div>
+        <div class="qcard" id="qcard"></div>
+        <div class="pops" id="pops"></div>
+        <div class="splash" id="splash"></div>
+        <div class="over" id="over"><div><h4>Try the format yourself</h4><p>A playable mock so you can feel how an episode runs. Here you step in as <b>Minal</b> (right) and tap the answers, while <b>Kadesh</b> (left) answers on his own. Every wrong answer adds a litre to the bag. 45 seconds. Lowest score gets the ice bucket.</p><p class="ovnote">In the real Reel, both hosts play on camera. Viewers play along in their heads and fight it out in the comments.</p><button class="btn" id="startBtn" style="border-color:#fff">▶ Start the timer</button></div></div>
+      </div>
+      <div class="thsw" role="group" aria-label="Game look (only you see this)"><span>Look · only you see this</span><button data-th="show" aria-pressed="true">A · Game-show studio</button><button data-th="garden" aria-pressed="false">B · Evening garden</button><button data-th="set" aria-pressed="false">C · Real set</button></div>
+      <p class="note" style="text-align:center">A playable mock of 1 episode, using the real "Heavy Baggage" question set.</p>
+      <div class="realnote"><b>🎬 This mock shows the mechanics, not the final look.</b> The real episodes are shot with our hosts in cleaner, more aesthetic frames, and cut tight: <mark>45–60 seconds max</mark>.</div>
+    </div>
+    <div class="how">
+      <h3>Every episode, same engine</h3>
+      <div class="flow">
+        <div><b>0s</b><span>Frame 1 shows the stakes. The 45–60s timer is already running.</span></div>
+        <div><b>Q1–4</b><span>An off-camera voice reads each question. 3 options pop up. +1 right, −1 wrong, the score jumps over their heads.</span></div>
+        <div><b>Q5</b><span><b style="background:var(--ink)">⏸</b> Everything freezes: "YOUR TURN. 3 SECONDS." The viewer plays.</span></div>
+        <div><b>Q6–8</b><span>Pop culture × travel, crazy country facts, and 1 rage-bait answer people will argue about.</span></div>
+        <div><b>0:00</b><span>Loser pays the punishment. A tie goes to 1 sudden-death question.</span></div>
+        <div><b>End</b><span>A bonus question with no answer on screen. "Comment yours, real answer pinned tomorrow."</span></div>
+      </div>
+    </div>
+  </div>
+      <div class="why gwhy">
+        <div><p style="margin:0"><b>Built to start <span class="hl">arguments</span>.</b><span>Hawaiian pizza is from Canada. Chicken tikka masala is claimed by Glasgow. Every answer is true, and every one gets an "um, actually".</span></p></div>
+        <div><p style="margin:0"><b>Built to <span class="hl">scale</span>.</b><span>12 reusable stakes, each with its own question set. 5 episodes shoot in a day, in an office or garden.</span></p></div>
+        <div><p style="margin:0"><b><span class="hl">CLEARTRIP</span> in every episode.</b><span>At least 1 question per episode is a Cleartrip question: a live fare ("Goa or Bangkok, which is cheaper from Delhi this Saturday?"), a sale price or an app feature. The product is part of the game, not an ad break.</span></p></div>
+        <div><p style="margin:0"><b>Gives <span class="hl">YOUTUBE</span> a real boost.</b><span>Quiz-and-punishment is one of the formats YouTube Shorts rewards most: high watch-through, replays and comment wars. Every episode goes up on Shorts too, so the game becomes the engine that grows Cleartrip's YouTube views alongside Instagram, from the same shoot.</span></p></div>
+      </div>
+  <div class="cfix game-c">
+    <div class="cf-head"><span class="cf-k">💬 Fixes the comment problem</span><h3>Every episode ends in a <em>debate</em> in the comments.</h3><p>Surprising-but-true answers, a rage-bait question and a bonus with no answer on screen give people something to argue about. They post their scores, defend their answers and tag a friend to beat them. That's <mark>debate</mark>, not a 1-word reply.</p><div class="cf-tags"><span>DEBATES</span><span>SCORES</span><span>"UM, ACTUALLY"</span><span>FRIEND TAGS</span></div></div>
+    <div class="cf-vs">
+      <div class="cf-col old"><small>Today · "comment the keyword"</small><div class="cf-chips"><span>QUIZ</span><span>LINK</span><span>🔥</span><span>QUIZ</span><span>YES</span></div><em>1 word. No conversation. The algorithm can tell.</em></div>
+      <div class="cf-arrow">→</div>
+      <div class="cf-col new"><small>What this format gets people saying</small><div class="cf-c"><b>@arjun.v</b>Hawaiian pizza from CANADA?? I refuse to believe this</div><div class="cf-c"><b>@sana_m</b>got 7/9 without cheating, @priya beat that</div><em>Illustrative comments, to show the kind of replies we're designing for.</em></div>
+    </div>
+  </div>
+  <div class="refs" data-slot="format-game"></div>
+  <div class="evolve"><div><b>The STAKES will keep changing.</b><span>We'll ride trends for new stakes (whatever challenge the internet is doing that week) and keep testing which ones hold attention longest. This bucket has 1 job: <mark>retention, comments and engagement</mark>, on Instagram and YouTube Shorts.</span></div></div>
+  <h3 style="margin-top:40px">12 stakes, unlimited episodes</h3>
+  <div class="tapnote"><span class="tn-i">👇</span><div><b>Tap any stake to open its full questionnaire</b> (9 questions + a bonus question for the comments) right below. While you read, the stake bar stays pinned at the top, so you can jump straight to the next one.</div></div>
+  <div class="stakes" id="stakes"></div>
+  <div class="qlegend">
+    <div><span class="tagq">⏸ Audience</span><p><b>Q5, the 3-second audience question.</b> Everything freezes and the viewer plays.</p></div>
+    <div><span class="tagq sd">Sudden death</span><p><b>Only if it's a tie at 0:00.</b> 1 final question, the hardest in the set. First right answer wins; the other takes the punishment. Not tied? It's skipped.</p></div>
+    <div><span class="tagq bn">Bonus</span><p><b>Shown after the punishment, never answered on camera.</b> "Comment your answer. Real answer in the pinned comment tomorrow." Often opinion or several right answers, so people argue.</p></div>
+  </div>
+  <div class="scwrap" id="qwrap">
+    <div class="tabbar stkbar"><span class="tb-k">🎯 STAKES</span><div class="tabs" id="stakeTabs" role="tablist"></div></div>
+    <div id="qset"></div>
+  </div>
+</div></section>
+
+
+
+
+
+
+
+<section class="ch" id="loop"><div class="wrap">
+  <div class="kick"><b>06</b> How we'll run it</div>
+  <div class="loop">
+    <div class="loop-h"><span class="lp-k">🔁 No big promises. A feedback loop.</span><p>We're not claiming every format will hit on day 1. We'll launch, read the numbers, and let them decide.</p></div>
+    <div class="loop-steps">
+      <div><i>1</i><b>Launch</b><span>SHORT FILMS and THE GAME go live alongside the regular talking heads, at 30–40 posts a month</span></div>
+      <div><i>2</i><b>Read the feedback</b><span>Watch time, comments, shares, saves and non-follower reach, format by format</span></div>
+      <div class="up"><i>3</i><b>Double down</b><span>More of what's working: the stakes, topics and styles that hold attention</span></div>
+      <div class="dn"><i>4</i><b>Replace what's not</b><span>Cut what doesn't land and swap in something new. We already have 2 more formats ready</span></div>
+    </div>
+  </div>
+</div></section>
+<section class="ch close" id="close"><div class="wrap">
+  <h2>From a page people scroll past<br>to one they <em>play along with</em><br>and <em>share.</em></h2>
+  <p>YAAS for Cleartrip · Clearly Tripping</p>
+</div></section>
+<div class="pbar"><button type="button" data-p="-1" aria-label="Previous">←</button><span id="pn">1/8</span><button type="button" data-p="1" aria-label="Next">→</button><button type="button" id="pexit">Exit</button></div>
+<div class="editbar"><span>Editing on · only you see the edit tools</span><button type="button" id="hideEdit">Hide them for presenting</button></div>
+<button type="button" class="showedit" id="showEdit" hidden>Show edit tools</button>
+</div>
+
+<script>
+(() => {
+const VIDEOS = {};
+const FILMS = [{"id": "nodie", "t": "The Town Where You Can't Die", "tag": "Northern lights · Longyearbyen, Norway", "txt": "Why this topic: \"A town where you're not allowed to die\" sounds impossible, so it stops the scroll instantly and opens a question nobody can leave unanswered. Each answer tops the last (no burials, a rifle for polar bears, weeks without sunrise), which keeps people watching, and holding back the name keeps them there until the end. It lands on something every Indian traveller dreams about, the northern lights, so the strange fact turns into a trip people actually want.\nWhat happens: Minal tells Kadesh about a town where you're not allowed to die. He can't believe it, so she explains: the ground is frozen so hard that bodies never decompose, burials stopped decades ago, and anyone seriously ill gets flown out. It gets stranger: you carry a rifle outside town because of polar bears, and in winter the sun doesn't rise for weeks, only northern lights. The name is revealed at the end, Longyearbyen in Norway, as Minal checks Cleartrip for flights.\nVibe: shock, then curiosity, then a laugh, then wanderlust. About a minute.\nVisuals and framing: a college or office cafeteria, or a lakeside spot, in the afternoon. Two friends, Kadesh and Minal, sit opposite each other with chai (at the lakeside, side by side on a bench). Over-the-shoulder shots, with an insert of her phone at the end.\nMINAL: Did you know there's a town where you're not allowed to die?\nKADESH: What?\nMINAL: Yeah. And the more you read about it, the crazier it gets.\nKADESH: But how do you even stop someone from dying?\nMINAL: You don't stop them. You just send them away.\nKADESH: Send them where?\nMINAL: Okay, listen. It's so cold there that the ground stays frozen all year. Like, permanently. So if you bury someone, the body doesn't decompose. It just stays exactly like that. So back in the 1950s, they stopped burials completely.\nKADESH: Wait… so what happens if someone gets seriously sick?\nMINAL: They put them on a flight to the mainland. Basically, marne ke liye bhi flight book karni padti hai.\nKADESH: (laughing) Bro, what kind of place is this?\nMINAL: It gets weirder. If you step outside the town, you're supposed to carry a rifle. Because of polar bears.\nKADESH: Polar bears? Main toh society ke kutton se darta hoon.\nMINAL: And in winter, the sun doesn't come up for weeks. It's just dark, and the sky is full of northern lights.\nKADESH: Okay, no sun but northern lights every night… that actually sounds like a dream. Which place is this?\nMINAL: Longyearbyen. In Norway, way up near the North Pole. I'm checking Cleartrip, flights to Oslo first, then up from there.\nKADESH: Book it. I'll go. Bas wahan marna mat.\nShe opens the Cleartrip app. INSERT: flights to Oslo."}, {"id": "filter", "t": "Filter Nahi Hai", "tag": "Parents · Goa", "txt": "Why this topic: “Settle ho jaun, phir Mumma Papa ko proper trip pe le jaunga” is something almost every working Indian child has said. Most of us mean it, and keep pushing it back. Meanwhile parents never ask for anything for themselves, so the trip never happens. That gap between the big promise and the quiet years going by is something every viewer feels about their own parents. It’s also a fresh lens on Goa: on a page full of “best beaches” content, this is Goa through the eyes of a mother who has only ever seen it as her son’s photo.\nWhat happens: two close friends, Kadesh and Minal, at golden hour. His mom’s WhatsApp DP is still his Goa photo from three years ago, and she has never been. Minal calls him out on “once I’m settled”, puts a price on his Europe dream, and pushes him to take his parents to South Goa this weekend. It ends on Mom’s new DP.\nVisuals and framing - Golden hour, at a lake / terrace / garden. Two close friends, Kadesh and Minal, are sitting side by side and catching up the way old friends do. They're shot from behind. Close on his phone: he's forwarding the Goa beach photo to \"Mumma ❤️\". Her DP is his photo from his previous trip. The video starts mid conversation.\nKADESH: Ha Mother India Kha Lunga (and then cuts the call and forwards the photo)\nMINAL: Aunty ko abhi bhi lagta hai Goa ka paani fake hai. And honestly? That's on you.\nKADESH: Mujh pe? What did I even do?\nMINAL: Teen saal se tera Goa wala photo unka DP hai. And when she asked you, \"Paani sach mein itna neela hota hai?… What did you say?\nKADESH: (quietly) …Filter hai.\nA bit of pause.\nMINAL: (gently) Toh le kyun nahi jaata unko?\nKADESH: Le jaunga na. Once I'm settled, sabse pehle ill take Mumma Pappa to a proper Europe trip.\nMINAL: Okay. And what's the budget for this Europe trip?\nKADESH: Do logon ka…2-3 lakhs, easily.\nMINAL: And how much have you saved?\nKADESH: …Abhi start nahi kiya.\nMINAL: And one weekend in Goa?\nKADESH: (pause) 20-25K max.\nMINAL: So basically, ek 30K ka trip teen saal se tere Europe ka wait kar raha hai.\nKADESH: Yaar, I want to do something big for them…\nMINAL: Tu settle hone ka wait kr raha hai lakin unke guthne wait nahi karenge . Even if you take her on a trip once a year, how many trips do you think you guys have ?\nMINAL: Europe baad mein. Abhi ek weekend Goa le ja.\nKADESH: Goa? Mumma Papa ko? Wahan toh sab party..\nMINAL: That was North Goa, tera wala. Unhe South Goa le ja. Benaulim, Colva side. Super calm beaches and ret ekdum flat to mumma's knees will be fine ..\nKADESH: (reflex, half-hearted) Aur flight? Abhi festive season mein rates dekhe hain kitne high hai?\nMINAL: (doesn't even look at him) Arre chill.BBD chal raha haic Flights are starting at 1499. Toh ye bahana toh mat hi de.\nKADESH: Calls his mumma and asks \"mumma next weekend kya kar rahi ho ? \"\nKadesh lets out a small smile and looks down at his phone.\nINSERT, one week later: Mom's WhatsApp DP changes from his Goa photo to Mom and Papa with their feet in the waves, Mom laughing and holding up her saree. Status: \"Filter nahi hai.\""}, {"id": "nodoors", "t": "The Village With No Doors", "tag": "Zero trust issues · Shani Shingnapur", "txt": "Why this topic: every Indian home runs on locks: double locks, padlocks, the “did I lock the door?” check at 2 a.m. A bank with no locks goes against something viewers do every single night, so line one stops the scroll. Then the reason behind it, a whole village where houses traditionally have no doors, keeps them watching. It also comes with an easy trip attached: it’s close to Shirdi, so it’s a weekend plan the page can sell.\nWhat happens: Minal opens with the strangest fact first: there’s a bank in India with no locks. Kadesh refuses to believe it, so she rewinds. It’s in Shani Shingnapur, a village in Maharashtra where houses traditionally have no doors because people believe Shani dev protects them. The bank simply went along with the village. Then one more: the main idol sits under the open sky with no roof. It ends with the two of them planning a weekend that covers both Shirdi and Shingnapur, booked on Cleartrip.\nVibe: shock, then disbelief, then a laugh. About a minute.\nVisuals and framing: a college or office cafeteria, or a lakeside spot, in the afternoon. Two friends, Kadesh and Minal, sit opposite each other with chai (at the lakeside, side by side on a bench). Over-the-shoulder shots, with an insert of her phone at the end.\nMINAL: Did you know there’s a bank in India that has no locks?\nKADESH: What? That’s not possible.\nMINAL: It is. Because the whole village doesn’t have doors.\nKADESH: Wait, wait, wait. Explain.\nMINAL: It’s called Shani Shingnapur. In Maharashtra. Traditionally, houses there don’t have doors. Just open frames. People believe Shani dev protects the village, so nobody steals.\nKADESH: And the bank just… went along with it?\nMINAL: Yup. 2011, they opened a branch and kept it lockless.\nKADESH: Mere bank mein toh pen bhi chain se bandha hota hai.\nMINAL: (laughing) And wait, the idol in the main temple isn’t even inside a building. It just sits there in the open, no roof, no walls, under the sky.\nKADESH: No doors, no locks, no roof… this place has zero trust issues. Meanwhile, I check my door three times before sleeping and still wake up thinking I didn’t lock it.\nMINAL: That’s why we should go. It’s near Shirdi, so you can do both in one weekend. Saturday morning darshan at Shirdi, then drive to Shingnapur in the afternoon. Ruk, I’m checking Cleartrip, there are flights to Shirdi.\nKADESH: Okay, book it. But I’m telling you, I’m still carrying my own lock.\nMINAL: (laughing) For what? There’s no door to put it on.\nShe opens the Cleartrip app. INSERT: flights to Shirdi, for the weekend."}, {"id": "saved", "t": "The Saved Travel Folder", "tag": "Wishlist guilt · Hills", "txt": "Why this topic: almost everyone has a “Travel” saved folder full of places they’ve never been. We save the reel, comment “I’m coming here!!”, tag a friend, and never go. It’s a habit people half laugh at and feel half guilty about, which makes it a strong trigger: the viewer sees themselves in it within seconds. It also suits the page, because the people watching Clearly Tripping are those very savers. This video says the habit out loud, lets them laugh at themselves, and ends on the one thing that actually breaks it, booking\nWhat happens: Minal tells Kadesh an old man has been DMing her for seven years. Out of context the messages sound creepy, and Kadesh is ready to block him. Then the reveal: it’s a tiny chai stall in the hills. She commented “I’m coming here!!” on its reel in 2019, and every year since she has replied “pakka”, without ever going. It ends on her finally booking on Cleartrip, and uncle still not believing her. The whole thing is shot in the cafeteria.\nVibe: banter, a self-roast, then a small nudge. About a minute.\nVisuals and framing - A Office / college cafeteria, afternoon. Two friends friends, Kadesh and Minal, sit opposite each other at a table with cutting chai and a plate of samosas. Over-the-shoulder shots, with inserts of her phone screen. Minal stares at her phone, half laughing, half shocked.\nMINAL: There’s this uncle who’s been DMing me for seven years.\nKADESH: …What?\nMINAL: Wait, listen. (reads) 2019: “Kab aa rahe ho? Chai ready hai.”\nKADESH: Block him. Chai ready hai? Bro this is a scam, he’ll ask for an OTP next.\nMINAL: (scrolling, giggling) 2021: “Barf padi hai. Aa jao.”\nKADESH: Uncle is giving you weather updates now?\nMINAL: 2023: “Naye kulhad aaye hain 😄”\nKADESH: (losing it) Bro this uncle is more consistent than you.\nShe turns the phone to him. INSERT: a tiny Instagram page, a chai stall in the hills, an old man pouring chai. The bio: “Aaram se piyo, pahad kahin nahi ja rahe ☕”.\nMINAL: It’s this tiny chai stall in the mountains. Back in 2019 I commented on their reel, “OMG I’m coming here!!” And since then he just… keeps asking.\nKADESH: And did you go?\nMINAL: I mean… I do reply.\nKadesh takes the phone and scrolls the thread. He reads her replies out in a dramatic voice.\nKADESH: “Next month pakka uncle!” 2019. “This winter for sure!!” 2021. “Aa rahi hoon aa rahi hoon 😭” 2023. (looks up at her) Seven years and you’re still “aa rahi hoon”.\nMINAL: (laughing, snatching the phone back) It’s not like that yaar! Every time something comes up… kabhi leave nahi milti, kabhi budget, kabhi nobody’s free to come…\nKADESH: Aur uncle har saal naye kulhad le aate hain.\nThe phone buzzes. A new message, right now. INSERT: “Is baar bhi ‘pakka’ bologe? 😄”\nKADESH: (cracking up) He’s roasting you!\nMinal laughs into her hands. Then she starts typing. INSERT: “Pakka uncle—”. She stops, and deletes it.\nMINAL: (half laughing) Okay okay… before uncle also gives up on me.\nShe opens the Cleartrip app. INSERT: she books a trip to the hills for next weekend. Booking confirmed. She screenshots it and sends it to uncle.\nINSERT: typing… then, “Ticket nahi, aap aao 😄”\nKADESH: (dying laughing) Seven years, bro. Uncle has trust issues now.\nMinal throws a samosa at him."}, {"id": "fiji", "t": "Diwali in the Pacific", "tag": "Desi pride · Fiji", "txt": "Why this topic: Diwali is the most Indian thing there is. Hearing it's a national holiday in a country near Australia, a place nobody links with India, breaks the viewer's mental map in one line. Holding back the country's name keeps people watching to the end, and the answer (Indian workers taken there by the British, whose families still speak Hindi) is the kind of surprise people forward to family groups. The emotional pull is pride: a desi world on the other side of the planet.\nWhat happens: Minal tells Kadesh that there's a country near Australia where Diwali is a national holiday. He's confused, so she explains: Indian workers taken there in the 1800s to work on sugarcane farms, generations who stayed, Hindi recognised in the constitution, and a local Hindi that sounds like Bhojpuri mixed with Awadhi. The country's name is only revealed at the end, Fiji, as Minal opens Cleartrip.\nVibe: surprise, then curiosity, then desi pride, then the reveal. About a minute.\nVisuals and framing: a college or office cafeteria, or a lakeside spot, in the afternoon. Two friends, Kadesh and Minal, sit opposite each other with chai (at the lakeside, side by side on a bench). Over-the-shoulder shots, with an insert of her phone at the end.\nMINAL: Did you know there's a country near Australia where Diwali is a national holiday?\nKADESH: Near Australia? Diwali? That doesn't make any sense.\nMINAL: I know, I had the same reaction. You know those tiny islands near Australia you only see in honeymoon pictures?\nKADESH: Haan, the blue water wala.\nMINAL: That one. So, back in the 1800s, the British needed people to work on sugarcane farms there. And they took thousands of Indians, mostly from UP and Bihar, on ships. Most of them just… never came back. They settled there.\nKADESH: So their families are still there?\nMINAL: Generations. Today, almost a third of the country has Indian roots. Hindi is officially recognised in their constitution. And they speak their own version, which sounds like Bhojpuri and Awadhi mixed together.\nKADESH: Bro, that's like finding a desi colony on the other side of the planet.\nMINAL: Exactly. Now imagine Diwali on a beach there. Diyas lined up along the sea, the whole island lit up.\nKADESH: Okay, that's actually beautiful. I need to see that once. Waise, which country is this?\nMINAL: (laughing) Fiji. And I'm checking Cleartrip right now. If not this Diwali, then next one, pakka.\nShe opens the Cleartrip app. INSERT: flights to Fiji."}, {"id": "salary", "t": "Same Salary, Six Countries", "tag": "Jealousy · Off-season travel", "txt": "Why this topic: everyone has a friend or colleague who earns the same, or less, and is somehow always on a trip. We scroll their posts, do the salary maths in our heads, and settle on \"ghar se paise aate honge.\" That jealousy is universal, a little petty, and very funny, which makes it a strong trigger. The truth underneath is also squarely Cleartrip territory: it's rarely the money, it's when you book and when you go. This video takes a feeling everyone has and turns it into a habit the viewer can change.\nWhat happens: Minal is fuming that Sneha, her junior who earns less, is in Bali again. She knows everyone's CTC on the team, so she spins theories: family money, a side hustle, crypto. Kadesh takes her phone and reads Sneha's posts like a detective. Sneha travels in the off months and spends Diwali, Christmas and New Year in office, and she booked Bali back in October. It isn't crypto, it's the calendar. Minal opens Cleartrip and searches February.\nVibe: jealous gossip, then a detective reveal, then a quiet \"oh.\" About a minute.\nVisuals and framing: an office cafeteria, afternoon. Two friends, Kadesh and Minal, sit opposite each other at a table with cutting chai and samosas. Over-the-shoulder shots, with inserts of her phone screen.\nMINAL: (scrolling, outraged) Sneha is in Bali. Again.\nKADESH: Toh?\nMINAL: She's my junior! Her salary is less than mine!\nKADESH: Tujhe kaise pata?\nMINAL: Same team hai. I know everyone's CTC.\nKADESH: (laughing) That's scary.\nMINAL: Ghar se paise aate honge. Ya side hustle… no wait. Crypto. Pakka crypto.\nKADESH: Phone de.\nHe scrolls Sneha's profile. He reads it out like a detective.\nKADESH: Hampi, August long weekend. Meghalaya in July. Bali in February. (scrolls). Christmas? Office. New Year? \"WFH vibes ☕\".\nMINAL: Wait… jab hum sab Goa ke liye triple pay kar rahe hote hain, she's in office?\nKADESH: Aur jab tu office mein hoti hai, she's in Bali.\nHe finds an old story highlight. INSERT: \"Booked!! Bali, Feb ✈️\", posted in October.\nMINAL: She booked in OCTOBER? Main toh trip ke teen din pehle decide karti hoon.\nKADESH:huh , its not Crypto, its  Calendar.\nMinal grabs her phone back and opens the Cleartrip app. INSERT: she searches February.\nMINAL: (not looking up) And the CTC thing… kisi ko mat batana."}, {"id": "sanskrit", "t": "The Sanskrit Village", "tag": "School nostalgia · Mattur, Karnataka", "txt": "Why this topic: almost everyone grew up with Sanskrit as the subject they mugged up, bunked or barely passed, and assumed nobody actually speaks. Finding out there's an Indian village where people speak it every day, buying vegetables and scolding kids in Sanskrit, upends a belief viewers have held since school. That surprise is what stops the scroll, and the school nostalgia is what gets it shared .\nWhat happens: Kadesh is sure Sanskrit is a dead language. Minal tells him about Mattur, a village in Karnataka where people speak it every day. He doesn't believe her, then slowly does as she fills in the details: a community that has kept it alive for generations, kids who grow up speaking it at home, and people who travel there to learn. It ends with them planning a weekend trip, booked on Cleartrip.\nVibe: an argument, then surprise, then school nostalgia, then a plan. About a minute.\nVisuals and framing: a college or office cafeteria, or a lakeside spot, in the afternoon. Two friends, Kadesh and Minal, sit opposite each other with chai and samosas (at the lakeside, side by side on a bench). Over-the-shoulder shots, with an insert of her phone at the end.\nKADESH: I'm telling you, Sanskrit is a dead language. Nobody actually speaks it anymore.\nMINAL: There's literally a village in Karnataka where people speak it every day.\nKADESH: Every day? No way. Show me one person.\nMINAL: Ek? Poora gaon. It's called Mattur. People buy vegetables, fight with their neighbours, talk on the phone, all in Sanskrit.\nKADESH: Who even taught them?\nMINAL: Nobody \"taught\" them. It's a community, Sankethis, and they've kept it alive for generations. Kids grow up speaking it at home.\nKADESH: Okay, that's actually wild. Main toh school mein Sanskrit ka period bunk karta tha.\nMINAL: And they have Vedic schools there. People come from other countries to learn.\nKADESH: People from other countries are going there to learn Sanskrit, and I couldn't clear class eight.\nMINAL: (laughing) So who's dead now, the language or you?\nKADESH: Fine, fine. Let's go see it. Bangalore se kitna door hai?\nMINAL: Friday night ki bus pakdo, Saturday subah Shivamogga. Ruk, Cleartrip pe dekhti hoon, weekend ki seats abhi khuli hain.\nShe opens the Cleartrip app. INSERT: a Bangalore to Shivamogga bus, Friday night.\nMINAL: Done. Ab ek line Sanskrit ki seekh le, warna wahan ke bachche tujhe judge karenge."}];
+const STAKES = [{"n": 1, "name": "Heavy Baggage", "qs": [{"k": "q", "q": "Game of Thrones' King's Landing is a real city. Which country?", "o": ["Croatia", "Scotland", "Italy"], "a": 0}, {"k": "q", "q": "Where can you go skiing inside a shopping mall?", "o": ["Dubai", "Singapore", "Qatar"], "a": 0}, {"k": "q", "q": "Hawaiian pizza was invented in?", "o": ["Hawaii", "Italy", "Canada"], "a": 2}, {"k": "q", "q": "Where is there an island where cats outnumber people?", "o": ["Japan", "Greece", "Turkey"], "a": 0}, {"k": "aud", "q": "Which is bigger?", "o": ["Greenland", "India"], "a": 1}, {"k": "q", "q": "Avatar's floating mountains are based on real mountains in ?", "o": ["China", "Norway", "Peru"], "a": 0}, {"k": "q", "q": "Which country has more pyramids than Egypt?", "o": ["Sudan", "Mexico", "India"], "a": 0}, {"k": "q", "q": "Where does an entire island shut down for one day a year, airport included?", "o": ["Bali", "Maldives", "Sri Lanka"], "a": 0}, {"k": "sd", "q": "Which is wider?", "o": ["Australia", "The Moon"], "a": 0}], "bonus": "Pineapple on pizza: yes or no?", "mech": "Both hold an open backpack with arms straight out. Each wrong answer adds a 1L bottle, and each right answer removes one. Drop the bag and you lose.", "lose": "Ice water bucket"}, {"n": 2, "name": "Wall Sit", "qs": [{"k": "q", "q": "The 3 Idiots ending was shot at a lake in?", "o": ["Ladakh", "Kashmir", "Sikkim"], "a": 0}, {"k": "q", "q": "Where in India do people build bridges out of living tree roots?", "o": ["Meghalaya", "Kerala", "Uttarakhand"], "a": 0}, {"k": "q", "q": "Where can you find a lake that's naturally bubblegum pink?", "o": ["Australia", "Iceland", "Maldives"], "a": 0}, {"k": "q", "q": "Nepal's clock is ahead of India's by?", "o": ["15 minutes", "30 minutes", "1 hour"], "a": 0}, {"k": "aud", "q": "Which is bigger?", "o": ["Africa", "Russia"], "a": 0}, {"k": "q", "q": "There's an airport named after Cristiano Ronaldo. Which country?", "o": ["Portugal", "Spain", "Brazil"], "a": 0}, {"k": "q", "q": "Croissants were actually born in?", "o": ["France", "Austria", "Belgium"], "a": 1}, {"k": "q", "q": "Where in India is there a village whose houses have no doors?", "o": ["Maharashtra", "Rajasthan", "Kerala"], "a": 0}, {"k": "sd", "q": "Which country celebrates New Year first?", "o": ["New Zealand", "Kiribati", "Japan"], "a": 1}], "bonus": "Best Bollywood movie shot abroad?", "mech": "Both sit against a wall with knees at 90°. Each wrong answer stacks a book on your thighs. Stand up and you lose.", "lose": "Ice water bucket"}, {"n": 3, "name": "Plank Pass", "qs": [{"k": "q", "q": "There's a bronze statue of SRK and Kajol from DDLJ. Which city?", "o": ["Zurich", "London", "Mumbai"], "a": 1}, {"k": "q", "q": "Where is it illegal to own just one guinea pig?", "o": ["Switzerland", "Japan", "UK"], "a": 0}, {"k": "q", "q": "The Harry Potter train bridge is real. Where?", "o": ["Scotland", "Ireland", "Wales"], "a": 0}, {"k": "q", "q": "A Japanese train left 20 seconds early. What did the company do?", "o": ["Apologised publicly", "Fired the driver", "Nothing"], "a": 0}, {"k": "aud", "q": "More people?", "o": ["Uttar Pradesh", "Brazil"], "a": 0}, {"k": "q", "q": "Which city claims it invented chicken tikka masala?", "o": ["Delhi", "Glasgow", "Lahore"], "a": 1}, {"k": "q", "q": "Money Heist's Royal Mint is in?", "o": ["Spain", "Mexico", "Portugal"], "a": 0}, {"k": "q", "q": "Which country's capital has zero traffic lights?", "o": ["Bhutan", "Nepal", "Maldives"], "a": 0}, {"k": "sd", "q": "How far apart are Russia and the USA at their closest?", "o": ["4 km", "80 km", "400 km"], "a": 0}], "bonus": "Best chicken tikka masala: India or the UK?", "mech": "Both hold a plank. Each wrong answer puts a 1L bottle on your back. Collapse and you lose.", "lose": "Ice water bucket"}, {"n": 4, "name": "Ice Fist", "qs": [{"k": "q", "q": "Mamma Mia was filmed in?", "o": ["Greece", "Italy", "Spain"], "a": 0}, {"k": "q", "q": "Where do men carry their wives in a race for a world title?", "o": ["Finland", "Ireland", "Australia"], "a": 0}, {"k": "q", "q": "Where is tipping considered rude?", "o": ["Japan", "USA", "UAE"], "a": 0}, {"k": "q", "q": "Where is there a beach where pigs swim with tourists?", "o": ["Bahamas", "Thailand", "Bali"], "a": 0}, {"k": "aud", "q": "Which country has no mosquitoes?", "o": ["Iceland", "Maldives"], "a": 0}, {"k": "q", "q": "Ketchup was originally made from?", "o": ["Tomatoes", "Fish", "Mango"], "a": 1}, {"k": "q", "q": "Fortune cookies come from?", "o": ["China", "Japan", "USA"], "a": 2}, {"k": "q", "q": "Frozen's kingdom Arendelle is based on?", "o": ["Norway", "Switzerland", "Canada"], "a": 0}, {"k": "sd", "q": "The world's shortest flight lasts?", "o": ["90 seconds", "9 minutes", "19 minutes"], "a": 0}], "bonus": "The most overrated travel destination?", "mech": "Each holds an ice cube in a closed fist. Each wrong answer adds another cube. Open your hand and you lose.", "lose": "Every cube down their shirt"}, {"n": 5, "name": "Karela Lineup", "qs": [{"k": "q", "q": "James Bond Island is in?", "o": ["Thailand", "Maldives", "Jamaica"], "a": 0}, {"k": "q", "q": "Deepika and Ranveer got married in?", "o": ["Italy", "Switzerland", "France"], "a": 0}, {"k": "q", "q": "Where is it illegal to step on money?", "o": ["Thailand", "UAE", "China"], "a": 0}, {"k": "q", "q": "In the Maldives, most resorts have an entire island to themselves. True or false?", "o": ["True", "False"], "a": 0}, {"k": "aud", "q": "Who has more pyramids?", "o": ["Egypt", "Sudan"], "a": 1}, {"k": "q", "q": "Where is selling chewing gum banned?", "o": ["Singapore", "Japan", "Dubai"], "a": 0}, {"k": "q", "q": "Where in India is the world's largest river island?", "o": ["Assam", "Kerala", "West Bengal"], "a": 0}, {"k": "q", "q": "Which country gets the fewest tourists in the world?", "o": ["Tuvalu", "North Korea", "Bhutan"], "a": 0}, {"k": "sd", "q": "Which country has three capital cities?", "o": ["South Africa", "Bolivia", "Netherlands"], "a": 0}], "bonus": "Hyderabadi or Lucknowi biryani?", "mech": "A row of empty shot glasses sits in front of each player. Each wrong answer fills one glass on your side with karela juice.", "lose": "Drinks the row"}, {"n": 6, "name": "Mirchi Plate", "qs": [{"k": "q", "q": "The temple from Indiana Jones is a real place. Which country?", "o": ["Jordan", "Egypt", "Mexico"], "a": 0}, {"k": "q", "q": "Where do people throw a giant buffet for monkeys every year?", "o": ["Thailand", "India", "Bali"], "a": 0}, {"k": "q", "q": "Who brought chillies to India?", "o": ["The Portuguese", "The British", "The Mughals"], "a": 0}, {"k": "q", "q": "Whose police patrol the streets in Lamborghinis?", "o": ["Dubai", "Singapore", "Monaco"], "a": 0}, {"k": "aud", "q": "Closer to Mumbai?", "o": ["Paris", "Tokyo"], "a": 1}, {"k": "q", "q": "Where does the government have to approve your baby's name?", "o": ["Iceland", "China", "Japan"], "a": 0}, {"k": "q", "q": "Where in India is there a lake with floating islands?", "o": ["Manipur", "Kashmir", "Kerala"], "a": 0}, {"k": "q", "q": "The White Lotus Season 3 was set in?", "o": ["Thailand", "Bali", "Japan"], "a": 0}, {"k": "sd", "q": "Bolivia has no sea. Does it have a navy?", "o": ["Yes", "No"], "a": 0}], "bonus": "The spiciest food you've had on a trip?", "mech": "Each player starts with an empty plate. Each wrong answer adds one green chilli.", "lose": "Eats the plate"}, {"n": 7, "name": "Ice Bowl", "qs": [{"k": "q", "q": "The Titanic set sail from?", "o": ["England", "USA", "Canada"], "a": 0}, {"k": "q", "q": "Where is there a hotel rebuilt out of ice every winter?", "o": ["Sweden", "Switzerland", "Russia"], "a": 0}, {"k": "q", "q": "Where does Christmas start in September?", "o": ["Philippines", "Brazil", "Italy"], "a": 0}, {"k": "q", "q": "The biggest desert in the world is?", "o": ["Sahara", "Antarctica", "Thar"], "a": 1}, {"k": "aud", "q": "Who owns Antarctica?", "o": ["Nobody", "USA", "Australia"], "a": 0}, {"k": "q", "q": "Where are there no roads connecting the towns at all?", "o": ["Greenland", "Iceland", "Norway"], "a": 0}, {"k": "q", "q": "Where does the sun not set for weeks in summer?", "o": ["Norway", "Spain", "Scotland"], "a": 0}, {"k": "q", "q": "The coldest capital city in the world is in?", "o": ["Russia", "Mongolia", "Canada"], "a": 1}, {"k": "sd", "q": "Which country has the most islands?", "o": ["Sweden", "Indonesia", "Philippines"], "a": 0}], "bonus": "The coldest place you've ever been?", "mech": "Each player has a bowl of water. Each wrong answer adds a scoop of ice to your bowl.", "lose": "10-second face dunk"}, {"n": 8, "name": "Look Up", "qs": [{"k": "q", "q": "Which country has a dragon on its flag?", "o": ["Bhutan", "China", "Japan"], "a": 0}, {"k": "q", "q": "Hobbiton from Lord of the Rings is a real village. Where?", "o": ["New Zealand", "Ireland", "Iceland"], "a": 0}, {"k": "q", "q": "Which country's flag isn't a rectangle?", "o": ["Nepal", "Bhutan", "Switzerland"], "a": 0}, {"k": "q", "q": "Scotland's national animal is?", "o": ["Lion", "Unicorn", "Eagle"], "a": 1}, {"k": "aud", "q": "Indonesia's flag is almost identical to?", "o": ["Monaco", "Japan", "Poland"], "a": 0}, {"k": "q", "q": "Brazil's flag shows the night sky over?", "o": ["Rio", "São Paulo", "Brasília"], "a": 0}, {"k": "q", "q": "Which country has an AK-47 on its flag?", "o": ["Afghanistan", "Mozambique", "Iraq"], "a": 1}, {"k": "q", "q": "Where in India do cars seem to roll uphill on their own?", "o": ["Ladakh", "Sikkim", "Kerala"], "a": 0}, {"k": "sd", "q": "Which country has the most time zones?", "o": ["France", "Russia", "USA"], "a": 0}], "bonus": "The best-looking flag in the world?", "mech": "A bucket of water hangs over each head. Each wrong answer tips your bucket one notch.", "lose": "Full dump"}, {"n": 9, "name": "Balloon Head", "qs": [{"k": "q", "q": "Kevin's hotel from Home Alone 2 is real. Which city?", "o": ["New York", "Chicago", "Los Angeles"], "a": 0}, {"k": "q", "q": "Bhutan charges every tourist a daily fee of?", "o": ["$10", "$100", "$1,000"], "a": 1}, {"k": "q", "q": "Where is there a statue of Yash Chopra?", "o": ["Switzerland", "London", "Dubai"], "a": 0}, {"k": "q", "q": "K3G's \"Suraj Hua Maddham\" was shot at?", "o": ["The Pyramids of Egypt", "Dubai", "Jordan"], "a": 0}, {"k": "aud", "q": "Which is bigger?", "o": ["Rajasthan", "Germany"], "a": 1}, {"k": "q", "q": "\"Shampoo\" is originally a word from?", "o": ["Hindi", "French", "English"], "a": 0}, {"k": "q", "q": "Where does a salt desert turn into the world's biggest mirror?", "o": ["Bolivia", "Chile", "Egypt"], "a": 0}, {"k": "q", "q": "Emily in Paris Season 4 moved to?", "o": ["Rome", "London", "Madrid"], "a": 0}, {"k": "sd", "q": "Mount Kilimanjaro is in?", "o": ["Kenya", "Tanzania", "Uganda"], "a": 1}], "bonus": "Most beautiful place you've ever been?", "mech": "A balloon hangs over each head, fed by a hose. Each wrong answer adds 3 seconds of water.", "lose": "The winner pops their balloon"}, {"n": 10, "name": "Passport Photo", "qs": [{"k": "q", "q": "Where can you legally rent a fake family?", "o": ["Japan", "China", "USA"], "a": 0}, {"k": "q", "q": "Which is bigger?", "o": ["Monaco", "New York's Central Park"], "a": 1}, {"k": "q", "q": "Priyanka and Nick got married in?", "o": ["Jodhpur", "Udaipur", "Jaipur"], "a": 0}, {"k": "q", "q": "Where in India is Asia's cleanest village?", "o": ["Meghalaya", "Kerala", "Sikkim"], "a": 0}, {"k": "aud", "q": "Amsterdam has more...", "o": ["Bikes than people", "Cars than people"], "a": 0}, {"k": "q", "q": "Brazil is named after a?", "o": ["Tree", "River", "King"], "a": 0}, {"k": "q", "q": "The Friends apartment set was actually in?", "o": ["Los Angeles", "New York", "London"], "a": 0}, {"k": "q", "q": "Where do hundreds of hot air balloons fill the sky every morning?", "o": ["Cappadocia, Turkey", "Dubai", "Bali"], "a": 0}, {"k": "sd", "q": "Ecuador is named after?", "o": ["The equator", "A volcano", "A king"], "a": 0}], "bonus": "Your worst passport photo story?", "mech": "Each wrong answer lets the crew draw one marker doodle on your face.", "lose": "Their doodled \"passport photo\" becomes the post's cover"}, {"n": 11, "name": "Hammer & Nail", "qs": [{"k": "q", "q": "The world's tallest statue is in?", "o": ["India", "China", "USA"], "a": 0}, {"k": "q", "q": "The world's biggest cricket stadium is in?", "o": ["Ahmedabad", "Melbourne", "Kolkata"], "a": 0}, {"k": "q", "q": "Where is there a town where you're not allowed to die?", "o": ["Norway", "Japan", "Iceland"], "a": 0}, {"k": "q", "q": "Where in India is there a village abandoned overnight 200 years ago?", "o": ["Rajasthan", "Gujarat", "Madhya Pradesh"], "a": 0}, {"k": "aud", "q": "Who owns Easter Island, home of the giant stone heads?", "o": ["Chile", "New Zealand"], "a": 0}, {"k": "q", "q": "Where do planes land on a beach?", "o": ["Scotland", "Maldives", "Goa"], "a": 0}, {"k": "q", "q": "The tomato fight in ZNMD is a real festival. Which country?", "o": ["Spain", "Italy", "Mexico"], "a": 0}, {"k": "q", "q": "The Kumbh Mela crowd is so big it's visible from?", "o": ["Space", "Nepal", "Sri Lanka"], "a": 0}, {"k": "sd", "q": "Which country has the most lakes?", "o": ["Canada", "Finland", "Russia"], "a": 0}], "bonus": "The weirdest festival you know?", "mech": "Each player has a wooden block. Each wrong answer taps one nail into your block.", "lose": "Hammers every nail in with their weak hand"}, {"n": 12, "name": "Bottle Flip", "qs": [{"k": "q", "q": "Which city has the longest full name in the world?", "o": ["Bangkok", "Mumbai", "Kuala Lumpur"], "a": 0}, {"k": "q", "q": "Spain's national anthem has?", "o": ["No words", "10 verses", "Two languages"], "a": 0}, {"k": "q", "q": "Sri Lanka's capital is?", "o": ["Colombo", "Kandy", "Sri Jayawardenepura Kotte"], "a": 2}, {"k": "q", "q": "Which neighbour accepts the Indian rupee?", "o": ["Bhutan", "Sri Lanka", "Bangladesh"], "a": 0}, {"k": "aud", "q": "Which is bigger?", "o": ["UK", "Uttar Pradesh"], "a": 0}, {"k": "q", "q": "Crash Landing on You's romantic scenes were shot in?", "o": ["Switzerland", "Norway", "Canada"], "a": 0}, {"k": "q", "q": "Where can you eat at a restaurant 5 metres under the sea?", "o": ["Maldives", "Goa", "Thailand"], "a": 0}, {"k": "q", "q": "Halloween started in?", "o": ["Ireland", "USA", "Mexico"], "a": 0}, {"k": "sd", "q": "Which continent has no bees?", "o": ["Antarctica", "Australia", "South America"], "a": 0}], "bonus": "The hardest country for an Indian to get a visa?", "mech": "Each wrong answer adds one bottle flip you owe.", "lose": "Gets 20 seconds to land every flip; each miss = an ice cube down the shirt"}];
+const $ = (s, r=document) => r.querySelector(s), $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------- nav dots + count-ups ---------- */
+const secs = $$("section.ch");
+$("#dots").innerHTML = secs.map(s => `<a href="#${s.id}" aria-label="${s.id}"></a>`).join("");
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if(!e.isIntersecting) return;
+  const id = e.target.id;
+  $$("#dots a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + id));
+  $$("#topnav a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + id));
+}), {rootMargin:"-45% 0px -50% 0px"});
+secs.forEach(s => io.observe(s));
+/* stats + bars replay every time they come into view */
+function playCount(el){
+  const raw = el.dataset.count, to = +raw, suf = el.dataset.suf || "", dec = (raw.split(".")[1] || "").length, fin = raw + suf, t0 = performance.now(), run = (el.__run = (el.__run || 0) + 1);
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){ el.textContent = fin; return; }
+  const step = t => { if(el.__run !== run) return; const p = Math.min(1, (t - t0) / 1100); if(p >= 1){ el.textContent = fin; return; } el.textContent = (to * (1 - Math.pow(1 - p, 3))).toFixed(dec) + suf; requestAnimationFrame(step); };
+  requestAnimationFrame(step); setTimeout(() => { if(el.__run === run) el.textContent = fin; }, 1600);
+}
+function resetCount(el){ el.__run = (el.__run || 0) + 1; el.textContent = (0).toFixed((el.dataset.count.split(".")[1] || "").length) + (el.dataset.suf || ""); }
+function playBars(){ $$("#bars i").forEach(i => { i.style.transition = "none"; i.style.width = "0"; void i.offsetWidth; i.style.transition = ""; i.style.width = Math.max(1.2, +i.dataset.w) + "%"; }); }
+function resetBars(){ $$("#bars i").forEach(i => { i.style.transition = "none"; i.style.width = "0"; }); }
+const once = new IntersectionObserver(es => es.forEach(e => {
+  const isBars = e.target.id === "bars";
+  if(e.isIntersecting){ if(e.target.__shown) return; e.target.__shown = true; isBars ? playBars() : playCount(e.target); }
+  else if(e.intersectionRatio === 0){ e.target.__shown = false; isBars ? resetBars() : resetCount(e.target); }
+}), {threshold:[0, .4]});
+$$("[data-count]").forEach(e => { e.textContent = e.dataset.count + (e.dataset.suf || ""); once.observe(e); });
+once.observe($("#bars"));
+document.addEventListener("keydown", e => {
+  if(e.target.closest("input,textarea")) return;
+  if(!["ArrowDown","ArrowUp","PageDown","PageUp"].includes(e.key) || !e.altKey && (e.key === "ArrowDown" || e.key === "ArrowUp")) return;
+});
+
+/* ---------- films ---------- */
+let film = 0;
+function fmtScript(txt){
+  const parts = txt.split(/\n/).map(l => l.trim()).filter(Boolean);
+  let why = "", what = "", vis = "", vibe = ""; const lines = [];
+  for(const l of parts){
+    if(/^Why this topic:/i.test(l)) why = l.replace(/^Why this topic:\s*/i,"");
+    else if(/^What happens:/i.test(l)) what = l.replace(/^What happens:\s*/i,"");
+    else if(/^Visuals and framing/i.test(l)) vis = l.replace(/^Visuals and framing\s*[-:]?\s*/i,"");
+    else if(/^Vibe:/i.test(l)) vibe = l.replace(/^Vibe:\s*/i,"");
+    else lines.push(l);
+  }
+  const body = lines.map(l => {
+    const m = l.match(/^([A-Z][A-Z]+)\s*(\([^)]*\))?\s*:\s*(.*)$/);
+    if(m) return `<p class="ln"><b>${esc(m[1])}${m[2] ? " " + esc(m[2].toLowerCase()) : ""}</b>${esc(m[3])}</p>`;
+    return `<p class="ln dir">${esc(l)}</p>`;
+  }).join("");
+  return {why, what, vis, vibe, body};
+}
+function renderFilms(){
+  $("#filmTabs").innerHTML = FILMS.map((f,i) => `<button role="tab" aria-selected="${i===film}" data-film="${i}"><i class="sn">#${i+1}</i>${esc(f.t)}</button>`).join("");
+  const f = FILMS[film], s = fmtScript(f.txt);
+  $("#filmView").innerHTML = `<div class="script"><div class="sc-meta"><div class="sclab">Description</div><div class="scnum">Demo script #${film+1} of ${FILMS.length}</div><h3>${esc(f.t)}</h3><div class="tg">${esc(f.tag)}</div>
+    <h4>Why this topic</h4><p>${esc(s.why)}</p><h4>What happens</h4><p>${esc(s.what)}</p>${s.vibe ? `<h4>Vibe</h4><p>${esc(s.vibe)}</p>` : ""}${s.vis ? `<h4>Look</h4><p>${esc(s.vis)}</p>` : ""}</div>
+    <div class="sc-body" tabindex="0" aria-label="Script"><div class="sclab">Script</div>${s.body}</div></div>
+    ${VIDEOS[f.id] ? `<div class="vref"><div class="vh">▶ Concept film · ≈ 2.5 min <span>Final cut: 1 min, 1.5 min max</span></div><video src="${VIDEOS[f.id]}" poster="videos/poster.jpg" controls playsinline preload="metadata"></video></div>` : ""}
+    <div class="refs" data-slot="film-${f.id}"></div>`;
+  paintSlots(); decorateVideos();
+}
+document.addEventListener("click", e => { const j = e.target.closest("[data-film-jump]"); if(!j) return; const i = FILMS.findIndex(f => f.id === j.dataset.filmJump); if(i < 0) return; film = i; renderFilms(); requestAnimationFrame(() => document.getElementById("scwrap").scrollIntoView({behavior:"smooth", block:"start"})); });
+document.addEventListener("click", e => { const b = e.target.closest("[data-film]"); if(b){ film = +b.dataset.film; renderFilms(); const w = document.getElementById("scwrap"); if(w.getBoundingClientRect().top < 0) requestAnimationFrame(() => w.scrollIntoView({behavior:"smooth", block:"start"})); } });
+
+/* ---------- stakes ---------- */
+let stake = 0;
+function renderStakes(){
+  $("#stakeTabs").innerHTML = STAKES.map((s,i) => `<button role="tab" aria-selected="${i===stake}" data-stake="${i}">${String(s.n).padStart(2,"0")} · ${esc(s.name)}</button>`).join("");
+  $("#stakes").innerHTML = STAKES.map((s,i) => `<button class="stake" aria-pressed="${i===stake}" data-stake="${i}"><span class="no">${String(s.n).padStart(2,"0")}</span><b>${esc(s.name)}</b><span>${esc(s.lose)}</span></button>`).join("");
+  const s = STAKES[stake];
+  $("#qset").innerHTML = `<div class="qset"><h3><span>${String(s.n).padStart(2,"0")}</span> ${esc(s.name)}</h3><p class="mech">${esc(s.mech)} <b>Loser:</b> ${esc(s.lose)}.</p>
+    <div class="qlist">${s.qs.map(q => `<div class="qrow${q.k!=="q"?" sp":""}"><div>${q.k==="aud"?'<span class="tagq">⏸ Audience</span>':q.k==="sd"?'<span class="tagq sd">Sudden death</span>':""}${esc(q.q)}<div class="ops">${q.o.map((o,j) => `<span class="${j===q.a?"ok":""}">${String.fromCharCode(65+j)}) ${esc(o)}</span>`).join("")}</div></div></div>`).join("")}</div>
+    <div class="bonus"><b>Bonus for the comments:</b> ${esc(s.bonus)}</div></div>
+    <div class="refs" data-slot="stake-${s.n}"></div>`;
+  paintSlots();
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-stake]"); if(b){ const fromBar = !!b.closest("#stakeTabs"); stake = +b.dataset.stake; renderStakes(); const w = $("#qwrap"); if(!fromBar || w.getBoundingClientRect().top < 0) requestAnimationFrame(() => w.scrollIntoView({behavior:"smooth", block:"start"})); const on = $("#stakeTabs [aria-selected=true]"); if(on) on.scrollIntoView({block:"nearest", inline:"center"}); } });
+
+
+/* ---------- lightbox: browse every image in the set ---------- */
+function openLB(items, idx){
+  document.querySelector(".lb")?.remove();
+  let i = Math.max(0, idx); const lb = document.createElement("div"); lb.className = "lb"; lb.setAttribute("role","dialog"); lb.setAttribute("aria-label","Reference viewer");
+  lb.innerHTML = `<div class="lb-top"><span class="lb-tag">📎 REFERENCE</span><span class="lb-n"></span><button class="lb-x" aria-label="Close">✕</button></div>
+    <button class="lb-nav prev" aria-label="Previous image">‹</button><figure class="lb-fig"><img alt=""><figcaption></figcaption></figure><button class="lb-nav next" aria-label="Next image">›</button>
+    <div class="lb-strip">${items.map((it,k) => `<button data-k="${k}" aria-label="Image ${k+1}"><img src="${it.src}" alt=""></button>`).join("")}</div>`;
+  const img = lb.querySelector(".lb-fig img"), cap = lb.querySelector("figcaption"), n = lb.querySelector(".lb-n");
+  const show = k => { i = (k + items.length) % items.length; img.src = items[i].src; cap.textContent = items[i].cap && items[i].cap !== "Reference" ? items[i].cap : ""; n.textContent = (i+1) + " / " + items.length;
+    lb.querySelectorAll(".lb-strip button").forEach((b,j) => b.classList.toggle("on", j === i)); lb.querySelector(".lb-strip .on")?.scrollIntoView({block:"nearest", inline:"center"});
+    lb.classList.toggle("single", items.length < 2); img.animate([{opacity:.3, transform:"scale(.98)"},{opacity:1, transform:"none"}],{duration:220}); };
+  const close = () => { lb.remove(); removeEventListener("keydown", key); };
+  const key = e => { if(e.key === "ArrowRight") show(i+1); else if(e.key === "ArrowLeft") show(i-1); else if(e.key === "Escape") close(); };
+  lb.addEventListener("click", e => { e.stopPropagation();
+    if(e.target.closest(".lb-x")) return close(); if(e.target.closest(".next")) return show(i+1); if(e.target.closest(".prev")) return show(i-1);
+    const t = e.target.closest(".lb-strip button"); if(t) return show(+t.dataset.k); if(e.target === lb) close(); });
+  let sx = null; lb.addEventListener("touchstart", e => { sx = e.touches[0].clientX; }, {passive:true});
+  lb.addEventListener("touchend", e => { if(sx === null) return; const dx = e.changedTouches[0].clientX - sx; if(Math.abs(dx) > 40) show(i + (dx < 0 ? 1 : -1)); sx = null; });
+  addEventListener("keydown", key); document.body.appendChild(lb); show(i); lb.querySelector(".lb-x").focus();
+}
+
+/* ---------- big play buttons on videos ---------- */
+/* Safari (Mac + iPhone) refuses some hosted videos that Chrome plays fine.
+   Fallback: download the file once, play it from memory. */
+const VBLOB = {};
+const isSafari = /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
+async function blobify(src){
+  if(VBLOB[src]) return VBLOB[src];
+  VBLOB[src] = (async () => { const r = await fetch(src); if(!r.ok) throw new Error("fetch " + r.status);
+    const b = await r.blob(); return URL.createObjectURL(b.type === "video/mp4" ? b : new Blob([b], {type:"video/mp4"})); })();
+  try { return await VBLOB[src]; } catch(e){ delete VBLOB[src]; throw e; }
+}
+async function rescue(v, fb){
+  if(v.dataset.rescued) return; v.dataset.rescued = "1";
+  const src = v.dataset.src || v.getAttribute("src"); v.dataset.src = src;
+  fb.classList.add("show"); fb.querySelector("span").textContent = "Loading the film for your browser…";
+  try { const u = await blobify(src); v.src = u; v.load(); const a = fb.querySelector("a"); if(a) a.href = u; fb.querySelector("span").textContent = "Ready. Tap ▶ to play.";
+        v.closest(".hasplay")?.classList.remove("playing");
+  } catch(e){ fb.querySelector("span").textContent = "Video not playing here?"; }
+}
+function decorateVideos(){
+  document.querySelectorAll("video:not([data-dec])").forEach(v => {
+    v.dataset.dec = "1"; v.setAttribute("controls",""); v.setAttribute("controlslist","nodownload"); v.muted = false; v.volume = 1;
+    let box = v.closest(".cv-vid");
+    if(!box){ box = document.createElement("div"); box.className = "vwrap"; v.parentNode.insertBefore(box, v); box.appendChild(v); }
+    const b = document.createElement("button"); b.type = "button"; b.className = "vplay"; b.setAttribute("aria-label","Play the concept film");
+    b.innerHTML = `<span class="vp-c"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="vp-t">Play the concept film</span>`;
+    box.appendChild(b); box.classList.add("hasplay");
+    const fb = document.createElement("div"); fb.className = "vfb"; fb.innerHTML = `<span>Video not playing here?</span><a href="${v.getAttribute("src")}" target="_blank" rel="noopener">Open the concept film ↗</a>`;
+    box.after(fb);
+    v.dataset.src = v.getAttribute("src");
+    const fail = () => { v.setAttribute("controls",""); fb.classList.add("show"); rescue(v, fb); };
+    if(isSafari){ const io2 = new IntersectionObserver(es => { if(es.some(x => x.isIntersecting)){ io2.disconnect(); blobify(v.dataset.src).catch(() => {}); setTimeout(() => { if(v.readyState === 0 && !v.dataset.rescued) fail(); }, 4000); } }, {rootMargin:"600px"}); io2.observe(box); }
+    b.addEventListener("click", () => { v.muted = false; v.volume = 1; const pr = v.play(); if(pr && pr.catch) pr.catch(fail); setTimeout(() => { if(v.paused && v.readyState < 2) fail(); }, 3500); });
+    v.addEventListener("error", fail); v.querySelector("source")?.addEventListener("error", fail);
+    v.addEventListener("play", () => { v.muted = false; if(v.volume === 0) v.volume = 1; box.classList.add("playing"); });
+    v.addEventListener("pause", () => { if(!v.seeking) box.classList.remove("playing"); });
+    v.addEventListener("ended", () => box.classList.remove("playing"));
+  });
+}
+/* ---------- playable demo ---------- */
+/* ---------- cartoon players ---------- */
+const SKIN = {k:"#B97A4B", m:"#E6AE84"};
+function headSVG(w){
+  const sk = SKIN[w];
+  return w === "k"
+    ? `<circle cx="32" cy="57" r="6" fill="${sk}"/><circle cx="88" cy="57" r="6" fill="${sk}"/><circle cx="60" cy="55" r="28" fill="${sk}"/>
+       <path d="M31 52 C28 27,46 17,62 19 C80 20,94 31,89 52 C85 41,73 35,60 37 C48 37,37 42,31 52Z" fill="#1A110B"/>
+       <path d="M35 60 C37 81,49 87,60 87 C71 87,83 81,85 60 C80 70,72 74,60 74 C48 74,40 70,35 60Z" fill="#2A1A10"/>`
+    : `<path d="M27 56 C25 24,45 15,60 16 C77 16,96 25,93 58 L95 104 C82 110,38 110,25 104Z" fill="#2A140C"/><circle cx="60" cy="14" r="11" fill="#2A140C"/>
+       <circle cx="60" cy="57" r="27" fill="${sk}"/>
+       <path d="M33 54 C33 31,49 24,61 24 C76 24,89 33,87 54 C81 41,70 36,61 41 C52 35,40 41,33 54Z" fill="#2A140C"/>
+       <circle cx="33" cy="68" r="3" fill="#F9B51E"/><circle cx="87" cy="68" r="3" fill="#F9B51E"/>`;
+}
+function faceBits(w){
+  const lip = w === "m" ? "#C2413B" : "#3A1E10";
+  return `<g class="cheek"><circle cx="45" cy="66" r="5" fill="#FF7A6B" opacity=".35"/><circle cx="75" cy="66" r="5" fill="#FF7A6B" opacity=".35"/></g>
+    <g class="brow"><path d="M43 45 L54 44" /><path d="M66 44 L77 45" /></g>
+    <g class="eyes"><ellipse cx="49" cy="55" rx="3.4" ry="4.3" fill="#1A110B"/><ellipse cx="71" cy="55" rx="3.4" ry="4.3" fill="#1A110B"/><circle cx="50.2" cy="53.6" r="1.1" fill="#fff"/><circle cx="72.2" cy="53.6" r="1.1" fill="#fff"/></g>
+    <path class="m m-n" d="M53 68 Q60 71 67 68" stroke="${lip}" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path class="m m-h" d="M50 65 Q60 77 70 65 Z" fill="${lip}"/>
+    <ellipse class="m m-s" cx="60" cy="69" rx="4.5" ry="6" fill="${lip}"/>`;
+}
+function figSVG(w){
+  const shirt = w === "k" ? "#2E57C8" : "#F26B0F", jeans = w === "k" ? "#24324F" : "#3B3F5C";
+  return `<svg viewBox="0 0 120 232" class="figsvg" aria-hidden="true">
+    <ellipse cx="60" cy="226" rx="40" ry="6" fill="rgba(0,0,0,.25)"/>
+    <rect x="37" y="160" width="20" height="58" rx="9" fill="${jeans}"/><rect x="63" y="160" width="20" height="58" rx="9" fill="${jeans}"/>
+    <ellipse cx="46" cy="220" rx="13" ry="6" fill="#fff"/><ellipse cx="74" cy="220" rx="13" ry="6" fill="#fff"/>
+    <path d="M28 100 Q60 88 92 100 L95 166 Q60 174 25 166Z" fill="${shirt}"/>
+    <rect x="52" y="80" width="16" height="14" rx="4" fill="${SKIN[w]}"/>
+    <g class="head">${headSVG(w)}${faceBits(w)}</g>
+    <g class="load">
+      <path d="M30 104 C22 122,30 140,46 146" stroke="${shirt}" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="M90 104 C98 122,90 140,74 146" stroke="${shirt}" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="M44 146 C44 132,76 132,76 146" stroke="#8A5A00" stroke-width="4" fill="none"/>
+      <rect x="34" y="142" width="52" height="44" rx="12" fill="#F9B51E" stroke="#8A5A00" stroke-width="3"/>
+      <path d="M36 156 Q60 166 84 156" stroke="#8A5A00" stroke-width="3" fill="none"/>
+      <rect x="54" y="160" width="12" height="9" rx="3" fill="#8A5A00"/>
+      <circle cx="46" cy="146" r="6.5" fill="${SKIN[w]}"/><circle cx="74" cy="146" r="6.5" fill="${SKIN[w]}"/>
+    </g></svg>`;
+}
+function miniSVG(w){ return `<svg viewBox="22 6 76 84" aria-hidden="true"><g class="head">${headSVG(w)}${faceBits(w)}</g></svg>`; }
+document.querySelectorAll("[data-fig]").forEach(el => el.innerHTML = figSVG(el.dataset.fig));
+document.querySelectorAll("[data-face]").forEach(el => el.innerHTML = miniSVG(el.dataset.face));
+function react(side, good, txt, said){
+  const pl = $(side === "a" ? "#pA" : "#pB"); if(!pl) return;
+  if(said){ pl.querySelector(".say")?.remove(); const sy = document.createElement("span"); sy.className = "say " + (good ? "ok" : "no"); sy.textContent = said; pl.appendChild(sy); }
+  pl.classList.remove("good","bad"); void pl.offsetWidth; pl.classList.add(good ? "good" : "bad");
+  clearTimeout(pl.__t); pl.__t = setTimeout(() => pl.classList.remove("good","bad"), 1100);
+  const mini = $(`.sbp.${side} .mini`); if(mini){ mini.classList.remove("good","bad"); void mini.offsetWidth; mini.classList.add(good ? "good" : "bad"); setTimeout(() => mini.classList.remove("good","bad"), 1100); }
+  const pop = document.createElement("span"); pop.className = "pop " + (good ? "g" : "b"); pop.textContent = txt;
+  pop.style.left = side === "a" ? "26%" : "74%"; $("#pops").appendChild(pop); setTimeout(() => pop.remove(), 1100);
+  if(!good){ const ph = $("#phone"); ph.classList.remove("shake"); void ph.offsetWidth; ph.classList.add("shake"); }
+}
+function loadUpdate(){ $("#pA").style.setProperty("--load", Math.min(G.bagA, 6)); $("#pB").style.setProperty("--load", Math.min(G.bagB, 6)); }
+document.addEventListener("click", e => { const b = e.target.closest("[data-th]"); if(!b) return;
+  const ph = $("#phone"); ph.className = ph.className.replace(/\bth-\w+/g, "").trim() + " th-" + b.dataset.th;
+  $$("[data-th]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); });
+
+const G = {on:false, t:45, i:0, a:0, b:0, bagA:0, bagB:0, timer:null, kTimer:null};
+const QS = STAKES[0].qs.filter(q => q.k !== "sd");
+function fmt(t){ return "0:" + String(Math.max(0,t)).padStart(2,"0"); }
+function bump(id, up){ const el = $(id); el.classList.remove("up","dn"); void el.offsetWidth; el.classList.add(up ? "up" : "dn"); }
+function bags(){ $("#bA").innerHTML = "<i></i>".repeat(G.bagA); $("#bB").innerHTML = "<i></i>".repeat(G.bagB); }
+function showQ(){
+  if(!G.on) return;
+  if(G.i >= QS.length){ end(); return; }
+  const q = QS[G.i];
+  if(q.k === "aud"){
+    const ov = document.createElement("div"); ov.className = "aud"; ov.innerHTML = `<div>⏸ YOUR TURN.<br>3 SECONDS.<small>${esc(q.q)} ${q.o.map((o,j)=>String.fromCharCode(65+j)+") "+esc(o)).join("  ")}</small></div>`;
+    $("#phone").appendChild(ov); clearInterval(G.timer);
+    let n = 3; const tick = setInterval(() => { n--; if(n <= 0){ clearInterval(tick); ov.innerHTML = `<div>${esc(q.o[q.a])}<small>Did you get it?</small></div>`; setTimeout(() => { ov.remove(); G.i++; run(); showQ(); }, 1300); } }, 1000);
+    return;
+  }
+  $$(".phone .say").forEach(x => x.remove());
+  $("#qcard").innerHTML = `<div class="qn"><span>Q${G.i+1} of ${QS.length}</span><span class="qh">Tap your answer</span></div><div class="qq">${esc(q.q)}</div><div class="op">${q.o.map((o,j) => `<button data-ans="${j}"><i>${String.fromCharCode(65+j)}</i><span>${esc(o)}</span></button>`).join("")}</div>`;
+  clearTimeout(G.kTimer);
+  G.kTimer = setTimeout(() => { if(!G.on || QS[G.i] !== q) return; const right = Math.random() < .6; G.a += right ? 1 : -1; if(!right) G.bagA++; else if(G.bagA) G.bagA--; $("#sA").textContent = G.a; bump("#sA", right); bags(); loadUpdate(); const pick = right ? q.a : (q.a + 1 + Math.floor(Math.random()*(q.o.length-1))) % q.o.length; react("a", right, right ? "+1" : "+1 L 💧", q.o[pick]); }, 1400 + Math.random()*1800);
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-ans]"); if(!b || !G.on) return;
+  const q = QS[G.i]; const j = +b.dataset.ans; const right = j === q.a;
+  $$("#qcard [data-ans]").forEach((x,k) => { x.disabled = true; if(k === q.a) x.classList.add("ok"); else if(k === j) x.classList.add("no"); });
+  G.b += right ? 1 : -1; if(!right) G.bagB++; else if(G.bagB) G.bagB--;
+  $("#sB").textContent = G.b; bump("#sB", right); bags(); loadUpdate(); react("b", right, right ? "+1" : "+1 L 💧", q.o[j]);
+  setTimeout(() => { G.i++; showQ(); }, 900);
+});
+function run(){ clearInterval(G.timer); G.timer = setInterval(() => { G.t--; $("#tm").textContent = fmt(G.t); $("#tm").classList.toggle("low", G.t <= 10); if(G.t <= 0) end(); }, 1000); }
+async function end(){
+  if(!G.on) return; G.on = false; clearInterval(G.timer); clearTimeout(G.kTimer);
+  const youLose = G.b < G.a, tie = G.b === G.a;
+  const loser = tie ? "It's a tie" : youLose ? "You lose" : "Kadesh loses";
+  const sp = $("#splash"); sp.innerHTML = "";
+  if(!tie && !matchMedia("(prefers-reduced-motion: reduce)").matches){ for(let k=0;k<40;k++){ const d = document.createElement("i"); d.style.left = (youLose?70:25) + (Math.random()*30-15) + "%"; d.style.top = "-10px"; sp.appendChild(d); d.animate([{transform:"translateY(0)"},{transform:`translateY(${420+Math.random()*120}px)`}],{duration:700+Math.random()*500,delay:Math.random()*300,easing:"ease-in",fill:"forwards"}); } }
+  $("#qcard").innerHTML = ""; if(!tie){ const lp = $(youLose ? "#pB" : "#pA"); lp.classList.add("soaked"); const bk = document.createElement("span"); bk.className = "bucket"; bk.textContent = "🪣"; bk.style.left = youLose ? "74%" : "26%"; $("#pops").appendChild(bk); }
+  await new Promise(r => setTimeout(r, tie ? 200 : 1500));
+  $("#over").hidden = false;
+  $("#over").innerHTML = `<div><h4>${loser}${tie ? "." : ". 🪣 Ice bucket."}</h4><p>${tie ? "Sudden death: Which is wider, Australia or the Moon? (Australia.)" : "That's the payoff everyone stayed for."}<br><br><b>Bonus for the comments:</b> ${esc(STAKES[0].bonus)}</p><button class="btn" id="startBtn" style="border-color:#fff">↻ Play again</button></div>`;
+}
+document.addEventListener("click", e => {
+  if(!e.target.closest("#startBtn")) return;
+  Object.assign(G, {on:true, t:45, i:0, a:0, b:0, bagA:0, bagB:0});
+  $("#sA").textContent = "0"; $("#sB").textContent = "0"; bags(); $("#tm").textContent = fmt(45); $("#tm").classList.remove("low"); $("#splash").innerHTML = "";
+  $("#pops").innerHTML = ""; $$("#pA,#pB").forEach(x => x.classList.remove("soaked")); loadUpdate();
+  $("#over").hidden = true; run(); showQ();
+});
+
+/* ---------- reference slots ---------- */
+const SLOT_TITLES = {competitors:"Competitor examples", "format-films":"Short films: overall references", "format-game":"The game: overall references"};
+const STATIC_REFS = [{"id": "190unnip981c", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.05 PM (1)", "at": 1791739196400, "data": "refimg/190unnip981c.jpg", "st": 1}, {"id": "1se9rpwyyp5e", "slot": "format-game", "kind": "image", "label": "Screenshot 2026-10-11 230059", "at": 1791740384978, "data": "refimg/1se9rpwyyp5e.jpg", "st": 1}, {"id": "26zg7lbx8zar", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.06 PM (2)", "at": 1791739185075, "data": "refimg/26zg7lbx8zar.jpg", "st": 1}, {"id": "2zqa7grc99cm", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 4.15.24 PM", "at": 1791739198102, "data": "refimg/2zqa7grc99cm.jpg", "st": 1}, {"id": "3so4jf5izoic", "slot": "format-game", "kind": "image", "label": "Screenshot 2026-10-11 231004", "at": 1791740430804, "data": "refimg/3so4jf5izoic.jpg", "st": 1}, {"id": "42xban0z99sk", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 4.15.23 PM", "at": 1791739198676, "data": "refimg/42xban0z99sk.jpg", "st": 1}, {"id": "4mjyoxtn98go", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.05 PM", "at": 1791739196952, "data": "refimg/4mjyoxtn98go.jpg", "st": 1}, {"id": "4ncfms9698wz", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 4.16.22 PM", "at": 1791739197539, "data": "refimg/4ncfms9698wz.jpg", "st": 1}, {"id": "64h3xnkp97o5", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.06 PM", "at": 1791739195925, "data": "refimg/64h3xnkp97o5.jpg", "st": 1}, {"id": "6bhj7ewt8ww7", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.09 PM", "at": 1791739181959, "data": "refimg/6bhj7ewt8ww7.jpg", "st": 1}, {"id": "6m4u1lg0u9oo", "slot": "format-game", "kind": "link", "label": "", "at": 1791740178312, "url": "https://www.youtube.com/shorts/cZ2QDVzusoE", "st": 1}, {"id": "93y1xv1b8xv7", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.08 PM", "at": 1791739183219, "data": "refimg/93y1xv1b8xv7.jpg", "st": 1}, {"id": "atarfuxv8wiu", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 10.36.48 PM", "at": 1791739181478, "data": "refimg/atarfuxv8wiu.jpg", "st": 1}, {"id": "crs6mogyt6ku", "slot": "format-game", "kind": "link", "label": "", "at": 1791740127630, "url": "https://www.youtube.com/shorts/RYM4fv0Phx8", "st": 1}, {"id": "dfjynnu0yof1", "slot": "format-game", "kind": "image", "label": "Screenshot 2026-10-11 225954", "at": 1791740384029, "data": "refimg/dfjynnu0yof1.jpg", "st": 1}, {"id": "hox0mgvn8yrt", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.07 PM", "at": 1791739184393, "data": "refimg/hox0mgvn8yrt.jpg", "st": 1}, {"id": "hx91jdi1i4tb", "slot": "format-films", "kind": "link", "label": "", "at": 1791739612127, "url": "https://www.instagram.com/p/DXBy3m5AVRM/", "st": 1}, {"id": "j1qd8n10yosv", "slot": "format-game", "kind": "image", "label": "Screenshot 2026-10-11 230030", "at": 1791740384527, "data": "refimg/j1qd8n10yosv.jpg", "st": 1}, {"id": "m4kefi7f8v34", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 10.36.50 PM", "at": 1791739179616, "data": "refimg/m4kefi7f8v34.jpg", "st": 1}, {"id": "n73w4zzbymng", "slot": "format-game", "kind": "image", "label": "Screenshot 2026-10-11 205722", "at": 1791740381740, "data": "refimg/n73w4zzbymng.jpg", "st": 1}, {"id": "oir9irnybn4l", "slot": "format-films", "kind": "link", "label": "", "at": 1791739309269, "url": "https://www.instagram.com/p/DaSqfv1SZmn/", "st": 1}, {"id": "ownp8ktt50qi", "slot": "stake-1", "kind": "image", "label": "Screenshot 2026-10-11 230030", "at": 1791740679930, "data": "refimg/ownp8ktt50qi.jpg", "st": 1}, {"id": "p4qbflyb979y", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.06 PM (1)", "at": 1791739195414, "data": "refimg/p4qbflyb979y.jpg", "st": 1}, {"id": "pfggrzl99a6n", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 4.15.22 PM", "at": 1791739199183, "data": "refimg/pfggrzl99a6n.jpg", "st": 1}, {"id": "ru96nneoh0a6", "slot": "moneyhook-logo", "kind": "image", "label": "616189158_17844745845670847_4680993582926278658_n", "at": 1791739559598, "data": "refimg/ru96nneoh0a6.jpg", "st": 1}, {"id": "t2u318bbtp4s", "slot": "format-game", "kind": "link", "label": "", "at": 1791740151676, "url": "https://www.youtube.com/shorts/Do2YNUFr5Sg", "st": 1}, {"id": "vts01yjhijmb", "slot": "format-films", "kind": "link", "label": "", "at": 1791739631315, "url": "https://www.instagram.com/p/DeUawnPPqXb/", "st": 1}, {"id": "w0eherzj8yci", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.07 PM (1)", "at": 1791739183842, "data": "refimg/w0eherzj8yci.jpg", "st": 1}, {"id": "xyet662l8vzy", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 10.36.49 PM", "at": 1791739180798, "data": "refimg/xyet662l8vzy.jpg", "st": 1}, {"id": "yhshfx818xep", "slot": "format-films", "kind": "image", "label": "WhatsApp Image 2026-10-11 at 6.10.08 PM (1)", "at": 1791739182625, "data": "refimg/yhshfx818xep.jpg", "st": 1}];
+const staticMap = () => new Map(STATIC_REFS.map(r => [r.id, r]));
+let db = null, canEdit = false, REFS = staticMap();
+function hostOf(u){ try { return new URL(u).hostname.replace(/^www\./,""); } catch { return "link"; } }
+function kindOf(u){ const h = hostOf(u); return /instagram/.test(h) ? ["Instagram","#D6249F"] : /youtu/.test(h) ? ["YouTube","#FF0000"] : /google/.test(h) ? ["Google","#4285F4"] : /drive|dropbox|frame\.io|vimeo/.test(h) ? ["Video","#F26B0F"] : [h, "#999"]; }
+function slotTitle(slot){ return SLOT_TITLES[slot] || (slot.startsWith("film-") ? "References for this film" : slot.startsWith("stake-") ? "References for this stake" : "References"); }
+function slotHead(slot){
+  if(slot === "format-films") return ["SHORT FILMS · Overall", "The look and feel we're going for across every film."];
+  if(slot === "format-game") return ["THE GAME · Overall", "How the game format looks and plays on other pages."];
+  if(slot.startsWith("film-")){ const f = FILMS.find(x => "film-" + x.id === slot); return [(f ? f.t : "This film"), "Mood, frames and moments that inspire this script."]; }
+  if(slot.startsWith("stake-")){ const st = STAKES.find(x => "stake-" + x.n === slot); return ["Stake " + (st ? String(st.n).padStart(2,"0") + " · " + st.name : ""), "What this stake looks like when someone actually does it."]; }
+  return [slotTitle(slot), ""];
+}
+function paintSlots(){
+  $$(".refs[data-slot]").forEach(box => {
+    const slot = box.dataset.slot;
+    if(box.dataset.built !== slot){
+      box.dataset.built = slot;
+      const [hT, hN] = slotHead(slot); box.innerHTML = `<div class="rh"><span class="rtag">📎 REFERENCES</span><div class="rht"><b>${esc(hT)}</b><span>${esc(hN)} <em>These are inspiration examples, not our final content.</em> Tap an image to see it full size.</span></div></div><div class="rbody"></div>
+        <form class="radd" data-rform="${slot}"><label class="up">＋ Image<input type="file" accept="image/*" multiple hidden data-rfile="${slot}"></label><input type="url" placeholder="Paste an Instagram, YouTube or video link" aria-label="Link"><input type="text" placeholder="Label (optional)" aria-label="Label" style="max-width:220px"><button type="submit">Add link</button></form>`;
+    }
+    const items = [...REFS.values()].filter(r => r.slot === slot).sort((a,b) => a.at - b.at);
+    const imgs = items.filter(r => r.kind === "image"), links = items.filter(r => r.kind !== "image");
+    box.querySelector(".rbody").innerHTML = (!items.length ? `<div class="rempty">References coming soon.</div>` : "") +
+      (imgs.length ? `<div class="rgrid">${imgs.map(r => `<div class="rimg"><img src="${r.data}" alt="${esc(r.label||"Reference")}" data-zoom>${r.label && !/^(whatsapp image|screenshot|img[_-]|image\b|\d{5,}|[0-9_]{12,})/i.test(r.label) ? `<div class="cap">${esc(r.label)}</div>` : ""}<button class="rx" data-rdel="${r.id}" aria-label="Remove">✕</button></div>`).join("")}</div>` : "") +
+      (links.length ? `<ol class="rlist">${links.map((r,i) => { const [k,c] = kindOf(r.url); return `<li style="--sc:${c}"><span class="rn">${String(i+1).padStart(2,"0")}</span><span class="src"><i></i>${esc(k)}</span><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.label || r.url)}</a><span class="go">↗</span><button class="rx" data-rdel="${r.id}" aria-label="Remove">✕</button></li>`; }).join("")}</ol>` : "");
+  });
+  $$("[data-logo]").forEach(el => { const img = [...REFS.values()].filter(r => r.slot === el.dataset.logo && r.kind === "image").sort((a,b) => b.at - a.at)[0];
+    const box = el.querySelector(".lgimg"); box.classList.toggle("has", !!img);
+    box.innerHTML = img ? `<img src="${img.data}" alt="${esc(el.dataset.alt || "The Money Hook logo")}"><button class="rx" data-rdel="${img.id}" aria-label="Remove">✕</button>` : `<span class="lgph">${el.dataset.ph ? esc(el.dataset.ph) : "The<br>Money<br>Hook"}</span>`; });
+}
+function toast(t){ const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
+function shrink(file, png){ return new Promise((res, rej) => { const img = new Image(), u = URL.createObjectURL(file);
+  img.onload = () => { let w = img.naturalWidth, h = img.naturalHeight, m = png ? 420 : 1100; if(w > m || h > m){ const k = m / Math.max(w,h); w = Math.round(w*k); h = Math.round(h*k); }
+    const c = document.createElement("canvas"); c.width = w; c.height = h; c.getContext("2d").drawImage(img, 0, 0, w, h); URL.revokeObjectURL(u);
+    if(png){ const o = c.toDataURL("image/png"); if(o.length < 230000) return res(o); } let q = .8, out = c.toDataURL("image/jpeg", q); while(out.length > 230000 && q > .35){ q -= .1; out = c.toDataURL("image/jpeg", q); } res(out); };
+  img.onerror = () => { URL.revokeObjectURL(u); rej(); }; img.src = u; }); }
+const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+async function addRef(doc){ if(!db || !canEdit){ toast("Only the deck owner can add references."); return; } const id = uid(); REFS.set(id, {id, ...doc}); paintSlots();
+  try { await db.doc("refs/" + id).set(doc); } catch(e){ REFS.delete(id); paintSlots(); toast(e && e.code === "quota_exceeded" ? "Storage is full. Remove an image first." : "That didn't save. Try again."); } }
+document.addEventListener("submit", e => { const f = e.target.closest("[data-rform]"); if(!f) return; e.preventDefault();
+  let url = f.querySelector('input[type=url]').value.trim(); const label = f.querySelector('input[type=text]').value.trim();
+  if(!url) return; if(!/^https?:\/\//i.test(url)) url = "https://" + url;
+  addRef({slot:f.dataset.rform, kind:"link", url, label:label.slice(0,120), at:Date.now()}); f.reset(); });
+document.addEventListener("change", async e => { const inp = e.target.closest("[data-rfile]"); if(!inp) return;
+  for(const file of inp.files){ if(!file.type.startsWith("image/")) continue; try { const data = await shrink(file, /logo/.test(inp.dataset.rfile)); await addRef({slot:inp.dataset.rfile, kind:"image", data, label:file.name.replace(/\.[^.]+$/,"").slice(0,60), at:Date.now()}); } catch { toast("Couldn't read that image."); } }
+  inp.value = ""; });
+document.addEventListener("click", async e => {
+  if(e.target.closest(".blg") && !document.getElementById("root").classList.contains("canedit")){ e.preventDefault(); return; }
+  const d = e.target.closest("[data-rdel]"); if(d){ e.preventDefault(); e.stopPropagation(); const id = d.dataset.rdel; const r = REFS.get(id); if(r && r.st && !db){ toast("This reference is built into the page. Ask Claude to remove it."); return; } REFS.delete(id); paintSlots(); try { await db.doc("refs/" + id).delete(); } catch { REFS.set(id, r); paintSlots(); toast("Couldn't remove it."); } return; }
+  const z = e.target.closest("[data-zoom]"); if(z){ const grid = z.closest(".rgrid") || z.parentElement; const list = [...grid.querySelectorAll("img[data-zoom]")]; openLB(list.map(i => ({src:i.src, cap:i.alt})), list.indexOf(z)); }
+});
+
+renderFilms(); renderStakes(); paintSlots(); decorateVideos();
+
+
+/* sticky script bar shadow */
+(() => { const bars = [...document.querySelectorAll(".tabbar")];
+  addEventListener("scroll", () => bars.forEach(bar => bar.classList.toggle("stuck", bar.getBoundingClientRect().top <= 59 && bar.parentElement.getBoundingClientRect().bottom > 140)), {passive:true}); })();
+/* identity chapter: era switch + map tips */
+(() => {
+  const sw = document.querySelector(".era-sw"), rows = document.querySelector(".era-rows"); if(!sw) return;
+  const set = k => { rows.dataset.on = k; sw.classList.toggle("then", k === "then"); sw.querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.era === k))); };
+  sw.addEventListener("click", e => { const b = e.target.closest("[data-era]"); if(b) set(b.dataset.era); });
+  let auto = true; sw.addEventListener("pointerdown", () => auto = false);
+  // first time it comes into view, show "then" and flip to "now" so the shift is felt
+  new IntersectionObserver((es, o) => es.forEach(en => { if(!en.isIntersecting) return; o.disconnect(); if(!auto) return; set("then"); setTimeout(() => auto && set("now"), 1600); }), {threshold:.5}).observe(rows);
+  document.querySelectorAll(".map .pt").forEach(p => p.addEventListener("click", () => { const on = !p.classList.contains("tipon"); document.querySelectorAll(".map .pt").forEach(x => x.classList.remove("tipon")); p.classList.toggle("tipon", on); }));
+})();
+/* ===== interaction layer ===== */
+(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const HOV = ".loop,.loop-steps>div,.bl-c,.vol,.vol-pts>div,.kind,.cfix,.cf-c,.th3>div,.eqc,.era,.first,.stat,.mk,.dg,.why div,.flow div,.phase,.mx,.oven,.evolve,.gap,.proof,.hing,.bars,.rlist li,.stake,.concept,.split>*,.pp,.qrow,.day,.week";
+  function tag(){ document.querySelectorAll(HOV).forEach(el => { if(!el.classList.contains("hov")){ el.classList.add("hov"); const bg = getComputedStyle(el).backgroundColor.match(/\d+/g); if(bg && (+bg[0] + +bg[1] + +bg[2]) < 240) el.classList.add("dk"); } }); }
+  tag(); new MutationObserver(() => tag()).observe(document.body, {childList:true, subtree:true});
+  // spotlight follows the cursor inside cards
+  document.addEventListener("pointermove", e => { const el = e.target.closest && e.target.closest(".hov"); if(!el) return; const r = el.getBoundingClientRect(); el.style.setProperty("--mx", (e.clientX - r.left) + "px"); el.style.setProperty("--my", (e.clientY - r.top) + "px"); }, {passive:true});
+  // ripple on click
+  document.addEventListener("pointerdown", e => { const el = e.target.closest && e.target.closest(".btn,.tabs button,.stake,.hov,.pbar button,.qcard .op"); if(!el || reduce) return;
+    if(getComputedStyle(el).position === "static") el.style.position = "relative";
+    if(getComputedStyle(el).overflow !== "hidden") el.style.overflow = "hidden";
+    const r = el.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2.2, s = document.createElement("span"); s.className = "ripple";
+    s.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d/2}px;top:${e.clientY - r.top - d/2}px`; el.appendChild(s); setTimeout(() => s.remove(), 650); });
+  // reveal on scroll
+  const fxSel = ".bl-c,.vol,.kind,.cfix,.era,.th3>div,.eqc,.eq .op,.first,.idh,.stats>*,.bars,.diag>*,.mk,.gap,.split,.together,.why>div,.hing,.proof,.concept,.flow>div,.evolve,.phase,.mix>*,.oven,.ch h2";
+  const io = new IntersectionObserver(es => es.forEach(en => { if(en.isIntersecting){ reveal(en.target); io.unobserve(en.target); } }), {threshold:.12, rootMargin:"0px 0px -6% 0px"});
+  function reveal(el){ el.classList.add("in"); setTimeout(() => { el.classList.remove("fx"); el.style.transitionDelay = ""; }, 1300); }
+  document.querySelectorAll(fxSel).forEach(el => { if(el.closest(".cover")) return; el.classList.add("fx"); const sib = el.parentElement ? [...el.parentElement.children].indexOf(el) : 0; el.style.transitionDelay = Math.min(sib, 6) * 70 + "ms"; io.observe(el); });
+  setTimeout(() => document.querySelectorAll(".fx:not(.in)").forEach(el => { const r = el.getBoundingClientRect(); if(r.top < innerHeight) reveal(el); }), 400);
+  // stat count-up
+  /* (stat count-up handled once, above) */
+  // reading progress bar
+  const bar = document.createElement("div"); bar.className = "scrollbar"; document.body.appendChild(bar);
+  addEventListener("scroll", () => { const h = document.documentElement.scrollHeight - innerHeight; bar.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`; }, {passive:true});
+  // only one video plays at a time
+  document.addEventListener("play", e => { document.querySelectorAll("video").forEach(v => { if(v !== e.target) v.pause(); }); }, true);
+})();
+
+let pi = 0;
+function go(i){ pi = Math.max(0, Math.min(secs.length-1, i)); secs[pi].scrollIntoView({behavior:"smooth"}); $("#pn").textContent = (pi+1) + "/" + secs.length; }
+$("#presentBtn").addEventListener("click", () => { document.body.classList.add("present"); document.documentElement.classList.add("present"); try { document.documentElement.requestFullscreen?.().catch(()=>{}); } catch {} go(0); });
+$("#pexit").addEventListener("click", () => { document.body.classList.remove("present"); document.documentElement.classList.remove("present"); try { document.fullscreenElement && document.exitFullscreen(); } catch {} });
+document.addEventListener("click", e => { const b = e.target.closest("[data-p]"); if(b) go(pi + +b.dataset.p); });
+document.addEventListener("keydown", e => { if(!document.body.classList.contains("present") || e.target.closest("input,textarea")) return;
+  if(["ArrowRight","PageDown"," "].includes(e.key)){ e.preventDefault(); go(pi+1); } if(["ArrowLeft","PageUp"].includes(e.key)){ e.preventDefault(); go(pi-1); } if(e.key === "Escape") $("#pexit").click(); });
+new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ pi = secs.indexOf(e.target); const n = $("#pn"); if(n) n.textContent = (pi+1) + "/" + secs.length; } }), {rootMargin:"-45% 0px -50% 0px"}).observe && secs.forEach(s => new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ pi = secs.indexOf(e.target); $("#pn").textContent = (pi+1) + "/" + secs.length; } }), {rootMargin:"-45% 0px -50% 0px"}).observe(s));
+(async () => {
+  const c = window.claude; if(!c || !c.use) return;
+  let user = null;
+  try { [db, user] = await Promise.all([c.use("db"), c.use("user")]); } catch {}
+  if(user){ try { canEdit = !!(await user.canEdit()); } catch {} }
+  document.getElementById("root").classList.toggle("canedit", !!(db && canEdit));
+  const rootEl = document.getElementById("root"), hb = document.getElementById("hideEdit"), sb = document.getElementById("showEdit");
+  if(hb && sb && db && canEdit){
+    hb.addEventListener("click", () => { rootEl.classList.remove("canedit"); sb.hidden = false; });
+    sb.addEventListener("click", () => { rootEl.classList.add("canedit"); sb.hidden = true; });
+    document.getElementById("presentBtn").addEventListener("click", () => { rootEl.classList.remove("canedit"); sb.hidden = false; });
+  }
+  if(!db) return;
+  db.collection("refs").onSnapshot(snap => { const m = staticMap(); snap.docs.forEach(d => m.set(d.id, {id:d.id, ...d.data()})); REFS = m; paintSlots(); }, () => {});
+})();
+})();
+</script>
